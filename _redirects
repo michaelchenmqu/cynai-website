@@ -1,0 +1,8 @@
+# Cynai — Netlify redirects
+
+# Fun apps — clean URLs (no trailing slash needed)
+/funapps/gf    /funapps/gf/index.html    200
+/funapps/bf    /funapps/bf/index.html    200
+
+# Catch-all SPA fallback (keep last)
+/*             /index.html               200
