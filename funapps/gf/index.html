@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GF App — For Her · Cynai</title>
+<meta name="description" content="A daily love companion app. Sweet messages, anniversary countdown, and everything in between.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d0608'/%3E%3Cpath d='M16 26s-10-6-10-13a7 7 0 0114 0 7 7 0 0114 0c0 7-10 13-10 13' fill='%23ff6b9d' opacity='0.9'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0608;
+    --bg2: #130a0e;
+    --surface: rgba(255,107,157,0.04);
+    --border: rgba(255,107,157,0.15);
+    --pink: #ff6b9d;
+    --rose: #ff3b6e;
+    --blush: #ffb3cc;
+    --gold: #ffd700;
+    --text: #f5e6ec;
+    --muted: #8a6b76;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
+
+  /* ── BG TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 20%, rgba(255,107,157,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255,59,110,0.05) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    background: rgba(13,6,8,0.85); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-link {
+    font-family: var(--font-mono); font-size: .7rem; letter-spacing: .1em;
+    color: var(--muted); text-decoration: none; text-transform: uppercase;
+    transition: color .2s; display: flex; align-items: center; gap: 8px;
+  }
+  .back-link:hover { color: var(--pink); }
+  .back-link::before { content: '←'; }
+  .topbar-title {
+    font-family: var(--font-serif); font-size: 1rem; font-style: italic;
+    color: var(--pink); letter-spacing: .02em;
+  }
+  .topbar-heart { font-size: 1.1rem; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+  /* ── ONBOARDING ── */
+  #onboarding {
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  #onboarding::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,107,157,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .onboard-card {
+    position: relative; z-index: 1;
+    max-width: 440px; width: 100%;
+    background: rgba(255,107,157,0.03);
+    border: 1px solid var(--border);
+    padding: 48px 40px;
+    text-align: center;
+  }
+  .onboard-heart { font-size: 3rem; margin-bottom: 24px; display: block; animation: pulse 2s ease-in-out infinite; }
+  .onboard-title {
+    font-family: var(--font-serif); font-size: 2rem; font-weight: 700;
+    color: var(--text); margin-bottom: 8px; line-height: 1.2;
+  }
+  .onboard-sub { color: var(--muted); font-size: .9rem; margin-bottom: 36px; line-height: 1.6; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; text-align: left; }
+  .form-field label { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+  .form-field input {
+    background: rgba(255,107,157,0.05); border: 1px solid var(--border);
+    color: var(--text); font-family: var(--font-body); font-size: .95rem;
+    padding: 12px 16px; outline: none; transition: border-color .2s; border-radius: 2px;
+    width: 100%;
+  }
+  .form-field input:focus { border-color: var(--pink); }
+  ::placeholder { color: rgba(255,255,255,.15); }
+  .start-btn {
+    width: 100%; margin-top: 8px;
+    background: var(--pink); color: var(--bg); border: none;
+    font-family: var(--font-mono); font-size: .8rem; letter-spacing: .12em;
+    text-transform: uppercase; font-weight: 700; padding: 14px;
+    cursor: pointer; transition: all .2s; border-radius: 2px;
+  }
+  .start-btn:hover { background: var(--rose); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,157,.3); }
+
+  /* ── MAIN APP ── */
+  #app { display: none; min-height: 100vh; position: relative; z-index: 1; padding-top: 52px; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── GREETING ── */
+  .greeting-section { text-align: center; padding: 48px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .greeting-date { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .15em; color: var(--muted); text-transform: uppercase; margin-bottom: 16px; }
+  .greeting-title {
+    font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700; line-height: 1.15; margin-bottom: 12px;
+    color: var(--text);
+  }
+  .greeting-title .name { color: var(--pink); font-style: italic; }
+  .greeting-sub { color: var(--muted); font-size: .95rem; }
+
+  /* ── TOGETHER COUNTER ── */
+  .together-bar {
+    background: rgba(255,107,157,0.06); border: 1px solid var(--border);
+    padding: 20px 28px; display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px; gap: 16px; flex-wrap: wrap;
+  }
+  .together-num { font-family: 'Playfair Display'; font-size: 3rem; font-weight: 700; color: var(--pink); line-height: 1; }
+  .together-label { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+  .together-milestones { display: flex; gap: 20px; flex-wrap: wrap; }
+  .milestone { text-align: center; }
+  .milestone-val { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 700; color: var(--blush); }
+  .milestone-key { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+
+  /* ── SECTION LABELS ── */
+  .sec-label {
+    font-family: var(--font-mono); font-size: .65rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--pink); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sec-label::before { content: ''; display: block; width: 18px; height: 1px; background: var(--pink); }
+
+  /* ── DAILY MESSAGE ── */
+  .message-card {
+    background: rgba(255,107,157,0.04); border: 1px solid rgba(255,107,157,0.2);
+    padding: 36px; margin-bottom: 32px; position: relative; overflow: hidden;
+  }
+  .message-card::before {
+    content: '"';
+    position: absolute; top: 12px; left: 20px;
+    font-family: var(--font-serif); font-size: 6rem; font-style: italic;
+    color: rgba(255,107,157,0.08); line-height: 1; pointer-events: none;
+  }
+  .message-text {
+    font-family: var(--font-serif); font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    font-style: italic; line-height: 1.7; color: var(--text);
+    position: relative; z-index: 1; margin-bottom: 16px;
+  }
+  .message-tag { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; color: var(--muted); }
+
+  /* ── GRID OF FEATURES ── */
+  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 32px; }
+  .feat-card {
+    background: rgba(255,107,157,0.03); border: 1px solid var(--border);
+    padding: 28px 24px; transition: border-color .2s, background .2s;
+  }
+  .feat-card:hover { border-color: rgba(255,107,157,0.3); background: rgba(255,107,157,0.06); }
+  .feat-icon { font-size: 1.5rem; margin-bottom: 12px; }
+  .feat-title { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+  .feat-body { color: var(--muted); font-size: .85rem; line-height: 1.65; margin-bottom: 16px; }
+  .feat-result {
+    font-family: var(--font-serif); font-size: 1rem; font-style: italic;
+    color: var(--blush); line-height: 1.5; min-height: 40px;
+    border-left: 2px solid rgba(255,107,157,0.3); padding-left: 12px;
+    display: none;
+  }
+  .feat-result.show { display: block; }
+  .feat-btn {
+    font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em;
+    text-transform: uppercase; background: transparent;
+    border: 1px solid var(--pink); color: var(--pink);
+    padding: 9px 18px; cursor: pointer; transition: all .2s;
+    margin-top: 12px;
+  }
+  .feat-btn:hover { background: var(--pink); color: var(--bg); }
+
+  /* ── NOTES ── */
+  .notes-section { margin-bottom: 32px; }
+  .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 16px; margin-bottom: 16px; }
+  .note-item {
+    background: rgba(255,107,157,0.05); border: 1px solid rgba(255,107,157,0.12);
+    padding: 16px; font-family: var(--font-serif); font-size: .9rem;
+    font-style: italic; color: var(--blush); line-height: 1.5;
+    position: relative;
+  }
+  .note-delete {
+    position: absolute; top: 6px; right: 8px;
+    font-family: var(--font-mono); font-size: .6rem; color: var(--muted);
+    background: none; border: none; cursor: pointer; padding: 2px 4px;
+    transition: color .2s;
+  }
+  .note-delete:hover { color: var(--rose); }
+  .note-empty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 8px 0; }
+  .note-input-row { display: flex; gap: 10px; }
+  .note-input {
+    flex: 1; background: rgba(255,107,157,0.04); border: 1px solid var(--border);
+    color: var(--text); font-family: var(--font-serif); font-size: .9rem; font-style: italic;
+    padding: 10px 14px; outline: none; transition: border-color .2s;
+  }
+  .note-input:focus { border-color: var(--pink); }
+  .note-add-btn {
+    font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em;
+    text-transform: uppercase; background: var(--pink); color: var(--bg);
+    border: none; padding: 10px 18px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .note-add-btn:hover { background: var(--rose); }
+
+  /* ── NEXT DATE COUNTDOWN ── */
+  .countdown-card {
+    background: rgba(255,107,157,0.04); border: 1px solid var(--border);
+    padding: 28px; display: flex; align-items: center; gap: 24px;
+    margin-bottom: 32px; flex-wrap: wrap;
+  }
+  .countdown-num { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 700; color: var(--gold); min-width: 60px; text-align: center; }
+  .countdown-info .countdown-label { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .countdown-info .countdown-name { font-family: var(--font-serif); font-size: 1.1rem; color: var(--blush); }
+  .countdown-edit { font-family: var(--font-mono); font-size: .65rem; color: var(--muted); background: none; border: none; cursor: pointer; padding: 4px 8px; border: 1px solid var(--border); transition: all .2s; margin-left: auto; }
+  .countdown-edit:hover { border-color: var(--pink); color: var(--pink); }
+  .countdown-set { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .countdown-set input { background: rgba(255,107,157,0.05); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: .85rem; padding: 8px 12px; outline: none; border-radius: 2px; }
+  .countdown-set input:focus { border-color: var(--pink); }
+  .countdown-set button { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; background: var(--pink); color: var(--bg); border: none; padding: 9px 16px; cursor: pointer; transition: background .2s; }
+  .countdown-set button:hover { background: var(--rose); }
+
+  /* ── RESET ── */
+  .reset-link { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .08em; color: var(--muted); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; transition: color .2s; }
+  .reset-link:hover { color: var(--rose); }
+
+  @media(max-width:600px) {
+    .onboard-card { padding: 36px 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .together-bar { flex-direction: column; align-items: flex-start; }
+    .together-milestones { gap: 16px; }
+    .note-input-row { flex-direction: column; }
+    .countdown-card { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── ONBOARDING ── -->
+<div id="onboarding">
+  <div class="onboard-card">
+    <span class="onboard-heart">💕</span>
+    <h1 class="onboard-title">Welcome to<br>the GF App</h1>
+    <p class="onboard-sub">A daily love companion, built just for her. Let's set things up.</p>
+    <div class="form-field">
+      <label>Her name</label>
+      <input type="text" id="ob-name" placeholder="e.g. Sophie" maxlength="30">
+    </div>
+    <div class="form-field">
+      <label>Your anniversary date</label>
+      <input type="date" id="ob-date">
+    </div>
+    <button class="start-btn" onclick="startApp()">Let's go 💖</button>
+  </div>
+</div>
+
+<!-- ── TOP BAR ── -->
+<nav class="topbar">
+  <a href="https://cynai.com.au" class="back-link">Cynai</a>
+  <div class="topbar-title">GF App</div>
+  <span class="topbar-heart">💗</span>
+</nav>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+  <div class="container">
+
+    <!-- Greeting -->
+    <div class="greeting-section">
+      <div class="greeting-date" id="today-date"></div>
+      <h1 class="greeting-title">Good <span id="time-of-day"></span>, <span class="name" id="her-name-display"></span> 💕</h1>
+      <p class="greeting-sub" id="greeting-sub"></p>
+    </div>
+
+    <!-- Together counter -->
+    <div class="together-bar">
+      <div>
+        <div class="together-num" id="days-together">0</div>
+        <div class="together-label">days together</div>
+      </div>
+      <div class="together-milestones" id="milestones"></div>
+    </div>
+
+    <!-- Daily love message -->
+    <div class="sec-label">Today's message for her</div>
+    <div class="message-card">
+      <div class="message-text" id="daily-message"></div>
+      <div class="message-tag">Changes every day ·  just for her</div>
+    </div>
+
+    <!-- Features grid -->
+    <div class="sec-label">Tap for a little something extra</div>
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon">✨</div>
+        <div class="feat-title">Surprise her</div>
+        <div class="feat-body">A random affirmation, just for this moment.</div>
+        <div class="feat-result" id="affirmation-result"></div>
+        <button class="feat-btn" onclick="genAffirmation()">Generate</button>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">💬</div>
+        <div class="feat-title">Conversation starter</div>
+        <div class="feat-body">Something meaningful to talk about together tonight.</div>
+        <div class="feat-result" id="question-result"></div>
+        <button class="feat-btn" onclick="genQuestion()">Get a question</button>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">🌹</div>
+        <div class="feat-title">Things I love about you</div>
+        <div class="feat-body">A random reason you're incredibly special.</div>
+        <div class="feat-result" id="love-result"></div>
+        <button class="feat-btn" onclick="genLoveReason()">Remind me</button>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <div class="feat-title">Date idea</div>
+        <div class="feat-body">Something sweet to do together — big or small.</div>
+        <div class="feat-result" id="date-result"></div>
+        <button class="feat-btn" onclick="genDateIdea()">Suggest one</button>
+      </div>
+
+    </div>
+
+    <!-- Next special date countdown -->
+    <div class="sec-label">Counting down to</div>
+    <div class="countdown-card" id="countdown-card">
+      <div>
+        <div class="countdown-num" id="countdown-days">—</div>
+        <div class="countdown-label">days away</div>
+      </div>
+      <div class="countdown-info">
+        <div class="countdown-label">Next special date</div>
+        <div class="countdown-name" id="countdown-name">Set a date below</div>
+      </div>
+      <button class="countdown-edit" onclick="toggleCountdownEdit()">Edit</button>
+    </div>
+    <div id="countdown-edit" style="display:none; margin-bottom:24px;">
+      <div class="countdown-set">
+        <input type="text" id="cd-label" placeholder="e.g. Her birthday" style="flex:1">
+        <input type="date" id="cd-date">
+        <button onclick="saveCountdown()">Save</button>
+      </div>
+    </div>
+
+    <!-- Love notes -->
+    <div class="notes-section">
+      <div class="sec-label">Love notes</div>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:14px">Leave little reminders of why she's wonderful.</p>
+      <div class="notes-grid" id="notes-grid"></div>
+      <div class="note-input-row">
+        <input type="text" class="note-input" id="note-input" placeholder="Write a love note..." maxlength="120">
+        <button class="note-add-btn" onclick="addNote()">Add note</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding-top:24px;border-top:1px solid var(--border)">
+      <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--muted)">Made with 💕 by </span>
+      <a href="https://cynai.com.au" style="font-family:var(--font-mono);font-size:.65rem;color:var(--pink);text-decoration:none">cynai.com.au</a>
+      <span style="margin-left:20px"><button class="reset-link" onclick="resetApp()">Reset app</button></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAILY_MESSAGES = [
+  "You make ordinary moments feel like something out of a dream. The way you laugh, the way you think, the way you see the world — it's all so entirely you, and that's the most beautiful thing.",
+  "Loving you is the easiest thing I've ever done. You fit into my life like you were always meant to be there — because maybe you were.",
+  "There's no version of my favourite day that doesn't have you in it. You're not just part of the good times; you are the good times.",
+  "The world is genuinely better with you in it. Not just for me — for everyone who gets to be near your warmth, your honesty, and your beautiful mind.",
+  "I hope you know how rare you are. Not just to me — just in general. The way you care, the way you show up, the way you keep being yourself — that's something truly special.",
+  "You deserve all the softness the world has to offer. Every gentle morning, every cosy evening, every moment of quiet joy — you deserve it all.",
+  "Even on the days you don't feel like it, you are so incredibly enough. More than enough. You always have been.",
+  "I love the person you are, but I also love the person I become when I'm with you. You bring out something I didn't know was there.",
+  "Some things just feel right — a favourite song, the first warm day of spring, the smell of rain. You feel like all of those things at once.",
+  "You have this quiet strength that I find myself thinking about often. You don't always see it in yourself, but it's there, and it's one of my favourite things about you.",
+  "Here's a secret: my best memories all have you somewhere in them. Even the small ones. Especially the small ones.",
+  "The little things you do — the way you remember things, the way you make people feel seen — those aren't small things at all. They're everything.",
+  "I'm so glad you exist. I know that sounds simple, but I mean it in the biggest possible way.",
+  "You have a way of making people feel like they matter. I hope someone makes you feel that way every single day. Starting today.",
+  "You are the kind of person that makes people's lives warmer just by being in them. Never underestimate that.",
+  "There's a difference between being pretty and being beautiful. You are beautiful — in the way that has nothing to do with mirrors.",
+  "Today, tomorrow, and on every ordinary Tuesday in between — you are someone worth celebrating.",
+  "The courage it takes to be kind, to be open, to keep loving even when it's hard — you do that every day. That's extraordinary.",
+  "I hope today is as lovely as you are, which means it's going to be a very good day indeed.",
+  "You're my favourite story — and the best part is, we're still in the middle of it.",
+  "Wherever you are today, I hope you feel the weight of how loved you are. Truly, completely loved.",
+  "Your mind is one of my favourite places to visit. The way you think, the things you notice — I never get tired of it.",
+  "You don't have to earn rest, softness, or good things. You just deserve them. Full stop.",
+  "I chose you. I'd choose you again. I'll keep choosing you.",
+  "The world gets a little bit better every time you decide to be yourself in it.",
+  "You are home to me. Not a place — a feeling. Warm, safe, and completely real.",
+  "Every version of you — the tired one, the silly one, the quiet one, the radiant one — I love them all equally.",
+  "You are allowed to take up space. To need things. To want things. Don't shrink yourself for anyone.",
+  "When I imagine my future, you're in every good part of it.",
+  "Some loves are loud. Ours has moments of quiet too — and I love those just as much.",
+];
+
+const AFFIRMATIONS = [
+  "You are braver than you believe, and stronger than you feel.",
+  "Your sensitivity is not a weakness — it's how you connect with the world so deeply.",
+  "The love you give out returns to you. It always does.",
+  "You are allowed to rest without earning it.",
+  "You handle more than people see. That matters.",
+  "Today, you are exactly where you need to be.",
+  "You make people's lives better just by being in them.",
+  "Your presence is a gift, even on the days you don't feel like it.",
+  "It's okay to not be okay. You're still so loved.",
+  "You deserve the kind of love you so freely give to others.",
+  "You are seen. You are known. You are cherished.",
+  "Every step forward counts, no matter how small.",
+];
+
+const QUESTIONS = [
+  "What's one thing that made you smile this week that I might not know about?",
+  "If we could go anywhere tomorrow, no planning needed — where would you pick?",
+  "What's something you've been thinking about lately that you haven't said out loud?",
+  "What does your ideal lazy Sunday look like?",
+  "Is there something you've been wanting to try together but haven't brought up?",
+  "What's a memory of us that you love coming back to?",
+  "What's something small I do that means a lot to you?",
+  "If you could relive one day of your life, which would it be and why?",
+  "What does feeling really loved look like for you?",
+  "What's something you're quietly proud of right now?",
+  "If you could learn any skill instantly, what would it be?",
+  "What song feels like us to you?",
+];
+
+const LOVE_REASONS = [
+  "The way your face lights up when you talk about something you love.",
+  "How you always remember the little details — about people, about moments.",
+  "Your laugh. Especially the one you can't control.",
+  "The way you make people feel like they matter just by listening.",
+  "How you keep going, even when things are hard.",
+  "The depth of care you have for the people in your life.",
+  "Your honesty — even when it's not easy to say.",
+  "How curious you are about the world and everything in it.",
+  "The way you look at things differently and help me see them too.",
+  "That you're both soft and strong at the same time.",
+  "How you find beauty in ordinary things.",
+  "The way you love — fully, openly, without holding back.",
+  "Your sense of humour, and how well it matches mine.",
+  "How you grow. Quietly, constantly, beautifully.",
+];
+
+const DATE_IDEAS = [
+  "Cook a new recipe together from scratch — make it a messy, fun event.",
+  "Pick a random destination on a map and just drive there.",
+  "Do a proper picnic — blanket, good food, no phones for an hour.",
+  "Watch the sunrise together somewhere new.",
+  "Go to a bookshop and pick a book for each other.",
+  "Take a long walk somewhere you've never been and get comfortably lost.",
+  "Have a home movie marathon with snacks you don't usually let yourselves have.",
+  "Do something creative together — paint, draw, make music, build something.",
+  "Write a bucket list together of 10 things you want to do this year.",
+  "Find a local market or fair and explore it with no plan.",
+  "Stargaze somewhere dark enough to actually see them.",
+  "Cook breakfast for dinner and make it a whole thing.",
+];
+
+function dayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  return Math.floor((now - start) / 86400000);
+}
+
+function seededPick(arr, seed) {
+  return arr[seed % arr.length];
+}
+
+function randomPick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function startApp() {
+  const name = document.getElementById('ob-name').value.trim();
+  const date = document.getElementById('ob-date').value;
+  if (!name) { document.getElementById('ob-name').focus(); return; }
+  if (!date) { document.getElementById('ob-date').focus(); return; }
+  localStorage.setItem('gf_name', name);
+  localStorage.setItem('gf_date', date);
+  loadApp();
+}
+
+function loadApp() {
+  const name = localStorage.getItem('gf_name');
+  const date = localStorage.getItem('gf_date');
+  if (!name || !date) return;
+
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  const now = new Date();
+
+  // Date + greeting
+  document.getElementById('today-date').textContent =
+    now.toLocaleDateString('en-AU', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const h = now.getHours();
+  document.getElementById('time-of-day').textContent = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  document.getElementById('her-name-display').textContent = name;
+
+  // Days together
+  const ann = new Date(date);
+  const days = Math.max(0, Math.floor((now - ann) / 86400000));
+  document.getElementById('days-together').textContent = days.toLocaleString();
+
+  // Greeting sub
+  const subs = [
+    `${days} days in, and still going strong. 🌹`,
+    `Every day with her is a good one. Keep making them count.`,
+    `She deserves to hear something beautiful today.`,
+  ];
+  document.getElementById('greeting-sub').textContent = seededPick(subs, days);
+
+  // Milestones
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30.4);
+  const years = Math.floor(days / 365);
+  const mDiv = document.getElementById('milestones');
+  mDiv.innerHTML = `
+    ${years > 0 ? `<div class="milestone"><div class="milestone-val">${years}</div><div class="milestone-key">${years===1?'Year':'Years'}</div></div>` : ''}
+    ${months > 0 ? `<div class="milestone"><div class="milestone-val">${months}</div><div class="milestone-key">${months===1?'Month':'Months'}</div></div>` : ''}
+    <div class="milestone"><div class="milestone-val">${weeks}</div><div class="milestone-key">${weeks===1?'Week':'Weeks'}</div></div>
+  `;
+
+  // Daily message (changes each day)
+  document.getElementById('daily-message').textContent = seededPick(DAILY_MESSAGES, dayOfYear());
+
+  // Countdown
+  renderCountdown();
+
+  // Notes
+  renderNotes();
+}
+
+function genAffirmation() {
+  const el = document.getElementById('affirmation-result');
+  el.textContent = randomPick(AFFIRMATIONS);
+  el.classList.add('show');
+}
+function genQuestion() {
+  const el = document.getElementById('question-result');
+  el.textContent = randomPick(QUESTIONS);
+  el.classList.add('show');
+}
+function genLoveReason() {
+  const el = document.getElementById('love-result');
+  el.textContent = randomPick(LOVE_REASONS);
+  el.classList.add('show');
+}
+function genDateIdea() {
+  const el = document.getElementById('date-result');
+  el.textContent = randomPick(DATE_IDEAS);
+  el.classList.add('show');
+}
+
+function toggleCountdownEdit() {
+  const el = document.getElementById('countdown-edit');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function saveCountdown() {
+  const label = document.getElementById('cd-label').value.trim();
+  const date = document.getElementById('cd-date').value;
+  if (!label || !date) return;
+  localStorage.setItem('gf_cd_label', label);
+  localStorage.setItem('gf_cd_date', date);
+  document.getElementById('countdown-edit').style.display = 'none';
+  renderCountdown();
+}
+function renderCountdown() {
+  const label = localStorage.getItem('gf_cd_label');
+  const date = localStorage.getItem('gf_cd_date');
+  if (!label || !date) return;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(date); target.setHours(0,0,0,0);
+  const diff = Math.ceil((target - now) / 86400000);
+  document.getElementById('countdown-days').textContent = diff > 0 ? diff : '🎉';
+  document.getElementById('countdown-name').textContent = label + (diff <= 0 ? ' — it\'s today!' : '');
+}
+
+function addNote() {
+  const input = document.getElementById('note-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const notes = JSON.parse(localStorage.getItem('gf_notes') || '[]');
+  notes.unshift({ text, id: Date.now() });
+  localStorage.setItem('gf_notes', JSON.stringify(notes));
+  input.value = '';
+  renderNotes();
+}
+function deleteNote(id) {
+  let notes = JSON.parse(localStorage.getItem('gf_notes') || '[]');
+  notes = notes.filter(n => n.id !== id);
+  localStorage.setItem('gf_notes', JSON.stringify(notes));
+  renderNotes();
+}
+function renderNotes() {
+  const notes = JSON.parse(localStorage.getItem('gf_notes') || '[]');
+  const grid = document.getElementById('notes-grid');
+  if (notes.length === 0) {
+    grid.innerHTML = '<div class="note-empty">Your love notes will appear here...</div>';
+    return;
+  }
+  grid.innerHTML = notes.map(n =>
+    `<div class="note-item">"${n.text}"<button class="note-delete" onclick="deleteNote(${n.id})">✕</button></div>`
+  ).join('');
+}
+
+function resetApp() {
+  if (!confirm('Reset everything and start over?')) return;
+  localStorage.removeItem('gf_name');
+  localStorage.removeItem('gf_date');
+  localStorage.removeItem('gf_notes');
+  localStorage.removeItem('gf_cd_label');
+  localStorage.removeItem('gf_cd_date');
+  document.getElementById('onboarding').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+// Note enter key
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('note-input').addEventListener('keydown', e => { if (e.key === 'Enter') addNote(); });
+  document.getElementById('ob-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('ob-date').focus(); });
+
+  // Check if already set up
+  if (localStorage.getItem('gf_name') && localStorage.getItem('gf_date')) {
+    loadApp();
+  }
+});
+</script>
+</body>
+</html>
