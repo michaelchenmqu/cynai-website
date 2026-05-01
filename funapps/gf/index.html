@@ -19,6 +19,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .lang-btn{background:none;border:none;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;padding:4px 11px;cursor:pointer;color:rgba(255,107,157,.4);transition:all .2s}
 .lang-btn.active{background:rgba(255,107,157,.18);color:var(--pink)}
 .container{max-width:720px;margin:0 auto;padding:20px 24px;display:flex;flex-direction:column;gap:18px}
+@media(min-width:900px){.container{max-width:960px}}
 .sec-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);margin-bottom:10px;display:flex;align-items:center;gap:10px;white-space:nowrap}
 .sec-label::before{content:'';display:block;width:14px;height:1px;background:var(--pink)}
 /* Profile block at top */
@@ -51,6 +52,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .message-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--muted)}
 /* Features */
 .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:700px){.features-grid{grid-template-columns:repeat(4,1fr)}}
 .feat-card{background:rgba(255,107,157,.03);border:1px solid var(--border);padding:16px;transition:border-color .2s,background .2s;cursor:pointer;border-radius:6px}
 .feat-card:hover{border-color:rgba(255,107,157,.3);background:rgba(255,107,157,.06)}
 .feat-icon{font-size:1.5rem;margin-bottom:8px;display:block}
@@ -131,7 +133,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="prof-left">
         <div class="prof-avatar">💕</div>
         <div>
-          <div class="prof-name" id="prof-name-display" id="prof-name"></div>
+          <div class="prof-name" id="prof-name-display"></div>
           <div class="prof-days" id="prof-days-display"></div>
         </div>
       </div>
@@ -393,14 +395,11 @@ function render(){
   document.getElementById('feat-section-label').textContent=t.featLabel;
   renderFeatures();
   document.getElementById('notes-label').textContent=t.notesLabel;
-  document.getElementById('notes-sub').textContent=t.notesSub;
   document.getElementById('note-input').placeholder=t.notePlaceholder;
   document.getElementById('note-add-btn').textContent=t.noteAddBtn;
-  document.getElementById('profile-label').textContent=t.profileLabel;
   document.getElementById('name-field-label').textContent=t.nameFieldLabel;
   document.getElementById('date-field-label').textContent=t.dateFieldLabel;
   document.getElementById('save-profile-btn').textContent=t.saveProfileBtn;
-  document.getElementById('days-label').textContent=t.daysLabel;
   document.getElementById('emergency-label').textContent=t.emergencyLabel;
   document.getElementById('clinic-title').textContent=t.clinicTitle;
   document.getElementById('clinic-sub').textContent=t.clinicSub;
