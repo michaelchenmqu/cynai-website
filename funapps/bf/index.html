@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BF App · Cynai</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg’ viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050810'/%3E%3Cpolygon points='16,4 19,12 28,12.5 21.5,18.5 23.5,27 16,22.5 8.5,27 10.5,18.5 4,12.5 13,12' fill='%234a9fff'/%3E%3C/svg%3E">
+<title>Cynai - fun apps</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='8' fill='%23050508'/%3E%3Cpath d='M 38,13 L 28,7 L 10,7 L 1,22 L 10,37 L 28,37' stroke='%2300ffc8' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='18' cy='14' r='4.5' fill='%2300ffc8'/%3E%3Ccircle cx='10' cy='28' r='4.5' fill='%2300ffc8'/%3E%3Ccircle cx='26' cy='28' r='4.5' fill='%2300ffc8'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#050810;--border:rgba(74,159,255,.15);--blue:#4a9fff;--blue2:#2a80f0;--sky:#a8d4ff;--gold:#ffd700;--text:#e6eef8;--muted:#5a7090;--dp:'Bebas Neue',Impact,sans-serif;--cn:'Noto Serif SC',serif;--body:'DM Sans',sans-serif;--mono:'Share Tech Mono',monospace}
@@ -197,7 +197,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 var lang=localStorage.getItem('bf_lang')||'en';
 var L={
   en:{title:'BF APP',cbadge:'Daily mission',cdoneBtn:'Mark complete ✓',cdoneComp:'Done for today ✓',flabel:'Quick hits',alabel:'Milestones',mlabel:'Memory jar',msub:'Drop in good memories as they happen.',mpl:'Add a memory...',madd:'Add',plabel:'Anniversary & countdown — set up (optional)',nl:'His name',dl:'Anniversary date',psave:'Save',dlabel:'days together',elabel:'🆘 EMERGENCY',ctitle:'GF EMOTION CLINIC',csub:'Is she upset? 20 questions to find her anger level + personality type + recovery plan.',csub2:'10 personality types · graded action plan',cstart:'Start diagnosis',creset:'Try again',footer:'Built by',pa:'Anger index',pp:'Personality analysis'},
-  zh:{title:'男友伴侣',cbadge:'今日任务',cdoneBtn:'打卡完成 ✓',cdoneComp:'今天已打卡 ✓',flabel:'今日小锦囊',alabel:'感情里程碑',mlabel:'美好记忆罐',msub:'把好的瞬间随手记下来，以后可以翻看。',mpl:'记录一个美好的瞬间…',madd:'记下',plabel:'设置纪念日与倒计时（可选）',nl:'他的名字',dl:'纪念日',psave:'保存',dlabel:'天 在一起',elabel:'🆘 紧急求救',ctitle:'女友情绪急救室 3.0',csub:'她生气了？20道题测出愤怒指数 + 性格类型 + 专属补救方案',csub2:'包含礼物 · 惊喜 · 食物 · 花大钱等终极手段',cstart:'开始自救',creset:'重新测一次',footer:'用 ⚡ 制作 by',pa:'愤怒指数',pp:'性格解析'}
+  zh:{title:'男友伴侣',cbadge:'今日任务',cdoneBtn:'打卡完成 ✓',cdoneComp:'今天已打卡 ✓',flabel:'今日小锦囊',alabel:'感情里程碑',mlabel:'美好记忆罐',msub:'把好的瞬间随手记下来，以后可以翻看。',mpl:'记录一个美好的瞬间…',madd:'记下',plabel:'设置纪念日与倒计时（可选）',nl:'他的名字',dl:'纪念日',psave:'保存',dlabel:'天 在一起',elabel:'🆘 紧急求救',ctitle:'女友情绪急救室',csub:'她生气了？20道题测出愤怒指数 + 性格类型 + 专属补救方案',csub2:'包含礼物 · 惊喜 · 食物 · 花大钱等终极手段',cstart:'开始自救',creset:'重新测一次',footer:'用 ⚡ 制作 by',pa:'愤怒指数',pp:'性格解析'}
 };
 var ACHS=[{icon:'🌱',en:'First Week',zh:'第一周',threshold:1},{icon:'🌙',en:'One Month',zh:'一个月',threshold:30},{icon:'⭐',en:'Three Months',zh:'三个月',threshold:90},{icon:'🔥',en:'Half Year',zh:'半年',threshold:180},{icon:'🏆',en:'One Year',zh:'一周年',threshold:365},{icon:'💎',en:'Two Years',zh:'两周年',threshold:730}];
 var D={
