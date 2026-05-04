@@ -20,7 +20,6 @@
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;line-height:1.6;cursor:none}
 
-  /* ── PAGE CURSOR (desktop only) ── */
   @media(hover:hover){
     #cursor{position:fixed;top:0;left:0;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;box-shadow:0 0 10px var(--cyan),0 0 28px rgba(0,255,200,.35)}
     #cursor-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(0,255,200,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .22s,height .22s}
@@ -32,17 +31,14 @@
     a,button,.card,.app-card{cursor:pointer}
   }
 
-  /* ── LOGO CURSOR DOT ── */
   @keyframes logo-dot-blink{50%{opacity:0}}
   @keyframes logo-ring-pulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:0;transform:scale(1.75)}}
   .logo-cur-dot{animation:logo-dot-blink 1s step-end infinite}
   .logo-cur-ring{animation:logo-ring-pulse 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
   .nav-cursor-svg{flex-shrink:0;margin-left:5px;overflow:visible}
 
-  /* ── GRID BG ── */
   .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,200,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,200,.025) 1px,transparent 1px);background-size:60px 60px;z-index:0;pointer-events:none}
 
-  /* ── NAV ── */
   nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,8,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
   .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
   .nav-wordmark{font-family:var(--font-display);font-weight:800;font-size:1.25rem;letter-spacing:-0.025em;line-height:1}
@@ -56,14 +52,12 @@
   .nav-cta:hover{color:#fff}
   .nav-cta:hover::before{transform:translateX(0)}
 
-  /* hamburger */
   .hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;gap:5px;z-index:10}
   .hamburger span{display:block;width:22px;height:1.5px;background:var(--cyan);transition:all .3s}
   .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
   .hamburger.open span:nth-child(2){opacity:0}
   .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
-  /* ── HERO ── */
   section{position:relative;z-index:1}
   #hero{min-height:100vh;display:flex;align-items:center;padding:100px 48px 80px;position:relative;overflow:hidden}
   .hero-scanner{position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(0,255,200,.03) 50%,transparent 100%);animation:scan 6s ease-in-out infinite;pointer-events:none}
@@ -71,9 +65,7 @@
   .hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,200,.06) 0%,transparent 70%);top:-150px;right:-100px;pointer-events:none}
   .hero-glow2{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,184,255,.05) 0%,transparent 70%);bottom:-80px;left:30%;pointer-events:none}
 
-  /* 2-column hero grid */
   .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;width:100%;align-items:center;position:relative;z-index:1}
-
   .hero-tag{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px}
   .hero-tag::before{content:'';display:block;width:32px;height:1px;background:var(--cyan)}
   .hero-title{font-family:var(--font-display);font-size:clamp(2.4rem,4.2vw,5rem);font-weight:800;line-height:.95;letter-spacing:-0.03em;margin-bottom:28px}
@@ -87,7 +79,6 @@
   .btn-ghost{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15);padding:13px 28px;text-decoration:none;transition:all .2s}
   .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
 
-  /* right column visual */
   .hero-visual{position:relative;display:flex;flex-direction:column;gap:12px;justify-content:center}
   .hero-deco{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:.7}
   .stat-card{background:rgba(0,255,200,.02);border:1px solid rgba(0,255,200,.1);padding:20px 24px;display:flex;align-items:center;gap:20px;transition:border-color .3s,background .3s;position:relative;z-index:1}
@@ -97,19 +88,16 @@
   .stat-label{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
   .stat-bar{width:40px;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);margin-top:4px;opacity:.4}
 
-  /* mobile stats row (hidden on desktop) */
   .hero-stats-mobile{display:none;gap:12px;margin-top:28px;flex-wrap:wrap}
   .stat-mini{background:rgba(0,255,200,.03);border:1px solid rgba(0,255,200,.1);padding:12px 16px;flex:1;min-width:90px}
   .stat-mini .stat-num{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--cyan);line-height:1;margin-bottom:3px}
   .stat-mini .stat-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 
-  /* ── TICKER ── */
   .ticker{background:rgba(0,255,200,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:11px 0;overflow:hidden;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;color:rgba(0,255,200,.5);white-space:nowrap}
   .ticker-inner{display:inline-flex;gap:56px;animation:ticker 28s linear infinite}
   @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   .ticker-inner span::before{content:'> ';color:var(--cyan)}
 
-  /* ── SECTIONS ── */
   .services-section{padding:90px 48px;border-top:1px solid var(--border)}
   .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;gap:24px}
   .section-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;display:flex;align-items:center;gap:12px}
@@ -118,7 +106,6 @@
   .section-title .dim{color:var(--muted);font-weight:400}
   .section-desc{max-width:280px;color:var(--muted);font-size:.85rem;line-height:1.7;text-align:right}
 
-  /* ── CARDS ── */
   .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
   .cards-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
   .card{background:var(--surface);border:1px solid var(--border);padding:36px 32px;position:relative;overflow:hidden;transition:border-color .3s,background .3s}
@@ -134,14 +121,12 @@
   .tag{font-family:var(--font-mono);font-size:.65rem;color:rgba(0,255,200,.5);letter-spacing:.05em;display:flex;align-items:center;gap:8px}
   .tag::before{content:'—';color:var(--border)}
 
-  /* cyber */
   #cyber{background:linear-gradient(180deg,var(--bg) 0%,rgba(255,59,110,.03) 50%,var(--bg) 100%)}
   #cyber .section-label{color:var(--red)} #cyber .section-label::before{background:var(--red)}
   #cyber .card::before{background:linear-gradient(90deg,var(--red),#ff7b3a)}
   #cyber .tag{color:rgba(255,59,110,.6)} #cyber .card-num{color:rgba(255,59,110,.3)}
   #cyber .card:hover{border-color:rgba(255,59,110,.3);background:rgba(255,59,110,.02)}
 
-  /* solutions */
   #solutions .section-label{color:var(--cyan2)} #solutions .section-label::before{background:var(--cyan2)}
   #solutions .card::before{background:linear-gradient(90deg,var(--cyan2),#7b61ff)}
   #solutions .tag{color:rgba(0,184,255,.6)} #solutions .card-num{color:rgba(0,184,255,.3)}
@@ -160,6 +145,23 @@
   .app-card.app-pink:hover{border-color:rgba(255,107,157,.35);background:rgba(255,107,157,.03)}
   .app-card.app-blue:hover{border-color:rgba(74,159,255,.35);background:rgba(74,159,255,.03)}
   .app-card.app-more{opacity:.55} .app-card.app-more:hover{opacity:.75;border-color:rgba(176,110,255,.3)}
+
+  /* ── ETF App Cards (NEW) ── */
+  .app-card.app-green::before{background:linear-gradient(90deg,#39ff8c,#00ffc8)}
+  .app-card.app-amber::before{background:linear-gradient(90deg,#ffb830,#ff8c00)}
+  .app-card.app-green:hover{border-color:rgba(57,255,140,.35);background:rgba(57,255,140,.03)}
+  .app-card.app-amber:hover{border-color:rgba(255,184,48,.35);background:rgba(255,184,48,.03)}
+  .app-icon-wrap.green{background:rgba(57,255,140,.1);border:1px solid rgba(57,255,140,.22)}
+  .app-icon-wrap.amber{background:rgba(255,184,48,.1);border:1px solid rgba(255,184,48,.22)}
+  .app-card-label.green{color:rgba(57,255,140,.5)}
+  .app-card-label.amber{color:rgba(255,184,48,.5)}
+  .app-tag.green{color:rgba(57,255,140,.6)}
+  .app-tag.amber{color:rgba(255,184,48,.6)}
+  .app-launch-btn.green{background:#39ff8c;color:var(--bg)}
+  .app-launch-btn.green:hover{background:#20e070;box-shadow:0 6px 22px rgba(57,255,140,.35);transform:translateY(-2px)}
+  .app-launch-btn.amber{background:#ffb830;color:var(--bg)}
+  .app-launch-btn.amber:hover{background:#ff9f00;box-shadow:0 6px 22px rgba(255,184,48,.35);transform:translateY(-2px)}
+
   .app-icon-wrap{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:22px}
   .app-icon-wrap.pink{background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.22)}
   .app-icon-wrap.blue{background:rgba(74,159,255,.12);border:1px solid rgba(74,159,255,.22)}
@@ -179,7 +181,6 @@
   .app-launch-btn.blue{background:#4a9fff} .app-launch-btn.blue:hover{background:#2a80f0;box-shadow:0 6px 22px rgba(74,159,255,.35);transform:translateY(-2px)}
   .coming-soon-tag{display:inline-flex;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;border:1px solid rgba(176,110,255,.25);color:rgba(176,110,255,.5);padding:8px 16px}
 
-  /* ── ABOUT ── */
   #about{padding:90px 48px;border-top:1px solid var(--border)}
   .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
   .about-terminal{background:rgba(0,255,200,.04);border:1px solid var(--border);font-family:var(--font-mono);font-size:.8rem;overflow:hidden}
@@ -197,7 +198,6 @@
   .about-pills{display:flex;flex-wrap:wrap;gap:8px}
   .pill{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,255,200,.07);border:1px solid rgba(0,255,200,.2);color:var(--cyan);padding:6px 14px}
 
-  /* ── CONTACT ── */
   #contact{padding:90px 48px;border-top:1px solid var(--border);background:linear-gradient(180deg,var(--bg) 0%,rgba(0,255,200,.02) 100%)}
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px}
   .contact-email{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:1rem;color:var(--cyan);text-decoration:none;margin-bottom:40px;transition:opacity .2s}
@@ -212,7 +212,6 @@
   .btn-submit{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;background:var(--cyan);color:var(--bg);border:none;padding:13px 28px;font-weight:700;transition:all .2s;align-self:flex-start;cursor:pointer}
   .btn-submit:hover{background:var(--green);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,255,200,.3)}
 
-  /* ── FOOTER ── */
   footer{padding:28px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;color:var(--muted)}
   footer a{color:var(--muted);text-decoration:none;transition:color .2s}
   footer a:hover{color:var(--cyan)}
@@ -220,18 +219,12 @@
   .footer-wordmark{font-family:var(--font-display);font-weight:800;font-size:.95rem;letter-spacing:-0.02em}
   .footer-wordmark .c{color:var(--cyan)} .footer-wordmark .ai{color:var(--text)}
 
-  /* ── FADE UP ── */
   .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
   .fade-up.visible{opacity:1;transform:none}
   .fade-up:nth-child(2){transition-delay:.08s}
   .fade-up:nth-child(3){transition-delay:.16s}
   .fade-up:nth-child(4){transition-delay:.22s}
 
-  /* ══════════════════════════════
-     RESPONSIVE
-  ══════════════════════════════ */
-
-  /* ── Tablet (≤1100px) ── */
   @media(max-width:1100px){
     nav{padding:0 32px}
     .nav-links{gap:20px}
@@ -243,57 +236,36 @@
     footer{padding:24px 32px}
   }
 
-  /* ── Mobile (≤768px) ── */
   @media(max-width:768px){
     nav{padding:0 20px;height:56px}
-
-    /* hide desktop nav links; show hamburger */
-    .nav-links{
-      display:none;position:fixed;top:56px;left:0;right:0;
-      background:rgba(5,5,8,.97);backdrop-filter:blur(20px);
-      flex-direction:column;padding:16px 24px 24px;
-      border-bottom:1px solid var(--border);gap:0;z-index:499
-    }
+    .nav-links{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(5,5,8,.97);backdrop-filter:blur(20px);flex-direction:column;padding:16px 24px 24px;border-bottom:1px solid var(--border);gap:0;z-index:499}
     .nav-links.open{display:flex}
     .nav-links li{border-bottom:1px solid rgba(0,255,200,.06)}
     .nav-links a{display:block;padding:13px 0;font-size:.82rem}
     .hamburger{display:flex}
     .nav-cta{display:none}
-
-    /* hero: single column */
     #hero{min-height:auto;padding:80px 20px 56px}
     .hero-inner{grid-template-columns:1fr;gap:0}
-    .hero-visual{display:none}          /* hide desktop right col */
-    .hero-stats-mobile{display:flex}    /* show mobile stats */
+    .hero-visual{display:none}
+    .hero-stats-mobile{display:flex}
     .hero-title{font-size:clamp(2rem,9vw,3rem);margin-bottom:20px}
     .hero-tag{font-size:.65rem;margin-bottom:18px}
     .hero-sub{font-size:.92rem;margin-bottom:28px}
     .hero-actions{gap:10px}
     .btn-primary,.btn-ghost{padding:12px 22px;font-size:.72rem}
-
-    /* sections */
     .services-section,#solutions,#fun-apps,#about,#contact{padding:60px 20px}
     .section-header{flex-direction:column;align-items:flex-start;margin-bottom:40px;gap:12px}
     .section-desc{text-align:left;max-width:100%}
     .section-title{font-size:clamp(1.8rem,7vw,2.5rem)}
-
-    /* all grids → 1 col */
     .cards-grid,.cards-grid-2,.fun-apps-grid{grid-template-columns:1fr}
     .card,.app-card{padding:28px 24px}
-
-    /* about */
     .about-grid{grid-template-columns:1fr;gap:36px}
     .terminal-body{padding:16px;font-size:.75rem;line-height:1.9}
-
-    /* contact */
     .contact-grid{grid-template-columns:1fr;gap:40px}
-
-    /* footer */
     footer{flex-direction:column;gap:14px;text-align:center;padding:24px 20px}
     .footer-logo{justify-content:center}
   }
 
-  /* ── Small phones (≤400px) ── */
   @media(max-width:400px){
     .hero-title{font-size:clamp(1.8rem,10vw,2.4rem)}
     .stat-mini{min-width:80px}
@@ -329,7 +301,6 @@
     </svg>
   </a>
 
-  <!-- hamburger (mobile only) -->
   <button class="hamburger" id="menuBtn" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
@@ -350,10 +321,7 @@
   <div class="hero-scanner"></div>
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
-
   <div class="hero-inner">
-
-    <!-- LEFT: content -->
     <div>
       <div class="hero-tag">Australia-based · AI Vibe Coding × Cyber Security × Business Solutions</div>
       <h1 class="hero-title">
@@ -366,17 +334,13 @@
         <a href="#contact" class="btn-primary">Get in touch</a>
         <a href="#ai" class="btn-ghost">Explore services</a>
       </div>
-      <!-- Mobile stats (only visible on small screens) -->
       <div class="hero-stats-mobile">
         <div class="stat-mini"><div class="stat-num">AI</div><div class="stat-label">Vibe Coding</div></div>
         <div class="stat-mini"><div class="stat-num">0-day</div><div class="stat-label">Threat Aware</div></div>
         <div class="stat-mini"><div class="stat-num">∞</div><div class="stat-label">Biz Solutions</div></div>
       </div>
     </div>
-
-    <!-- RIGHT: decorative + stat cards -->
     <div class="hero-visual">
-      <!-- Faint large hex-C mark as decoration -->
       <div class="hero-deco">
         <svg viewBox="0 0 300 300" fill="none" width="100%" height="100%" style="max-height:340px">
           <path d="M 258,88 L 190,48 L 68,48 L 7,150 L 68,252 L 190,252" stroke="rgba(0,255,200,0.055)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -391,30 +355,10 @@
           <circle cx="162" cy="178" r="4"  fill="rgba(0,255,200,0.12)"/>
         </svg>
       </div>
-      <!-- Stat cards -->
-      <div class="stat-card fade-up">
-        <div class="stat-num">AI</div>
-        <div class="stat-info">
-          <div class="stat-label">Vibe Coding</div>
-          <div class="stat-bar"></div>
-        </div>
-      </div>
-      <div class="stat-card fade-up">
-        <div class="stat-num">0-day</div>
-        <div class="stat-info">
-          <div class="stat-label">Threat Aware</div>
-          <div class="stat-bar"></div>
-        </div>
-      </div>
-      <div class="stat-card fade-up">
-        <div class="stat-num">∞</div>
-        <div class="stat-info">
-          <div class="stat-label">Business Solutions</div>
-          <div class="stat-bar"></div>
-        </div>
-      </div>
+      <div class="stat-card fade-up"><div class="stat-num">AI</div><div class="stat-info"><div class="stat-label">Vibe Coding</div><div class="stat-bar"></div></div></div>
+      <div class="stat-card fade-up"><div class="stat-num">0-day</div><div class="stat-info"><div class="stat-label">Threat Aware</div><div class="stat-bar"></div></div></div>
+      <div class="stat-card fade-up"><div class="stat-num">∞</div><div class="stat-info"><div class="stat-label">Business Solutions</div><div class="stat-bar"></div></div></div>
     </div>
-
   </div>
 </section>
 
@@ -429,10 +373,7 @@
 <!-- ═══ AI VIBE CODING ═══ -->
 <section id="ai" class="services-section">
   <div class="section-header">
-    <div>
-      <div class="section-label">01 / Service</div>
-      <h2 class="section-title">AI Vibe<br><span class="dim">Coding</span></h2>
-    </div>
+    <div><div class="section-label">01 / Service</div><h2 class="section-title">AI Vibe<br><span class="dim">Coding</span></h2></div>
     <p class="section-desc">We build real AI products — fast. From first prompt to deployed app, at a pace traditional development can't match.</p>
   </div>
   <div class="cards-grid">
@@ -446,14 +387,14 @@
     <div class="card fade-up">
       <div class="card-num">01.02</div>
       <svg class="card-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="8" stroke="#00ffc8" stroke-width="1.5"/><circle cx="22" cy="8" r="3" fill="#00ffc8" opacity="0.6"/><circle cx="22" cy="36" r="3" fill="#00ffc8" opacity="0.6"/><circle cx="8" cy="22" r="3" fill="#00ffc8" opacity="0.6"/><circle cx="36" cy="22" r="3" fill="#00ffc8" opacity="0.6"/><line x1="22" y1="11" x2="22" y2="14" stroke="#00ffc8" stroke-width="1.5"/><line x1="22" y1="30" x2="22" y2="33" stroke="#00ffc8" stroke-width="1.5"/><line x1="11" y1="22" x2="14" y2="22" stroke="#00ffc8" stroke-width="1.5"/><line x1="30" y1="22" x2="33" y2="22" stroke="#00ffc8" stroke-width="1.5"/><circle cx="22" cy="22" r="2.5" fill="#00ffc8"/></svg>
-      <div class="card-title">AI Agents & Copilots</div>
+      <div class="card-title">AI Agents &amp; Copilots</div>
       <div class="card-desc">Custom LLM agents, copilots, and multi-agent systems that connect securely to your data and automate complex workflows.</div>
       <div class="card-tags"><div class="tag">RAG &amp; memory systems</div><div class="tag">Multi-agent orchestration</div><div class="tag">Secure data connectivity</div></div>
     </div>
     <div class="card fade-up">
       <div class="card-num">01.03</div>
       <svg class="card-icon" viewBox="0 0 44 44" fill="none"><path d="M8 34V20l14-12 14 12v14H8z" stroke="#00ffc8" stroke-width="1.5" stroke-linejoin="round"/><rect x="16" y="26" width="12" height="8" rx="1" stroke="#00ffc8" stroke-width="1.5"/><circle cx="22" cy="30" r="1.5" fill="#00ffc8"/></svg>
-      <div class="card-title">AI Web Apps & APIs</div>
+      <div class="card-title">AI Web Apps &amp; APIs</div>
       <div class="card-desc">Production-grade AI-powered web applications and backend APIs, built on modern stacks and ready for cloud deployment.</div>
       <div class="card-tags"><div class="tag">Full-stack AI apps</div><div class="tag">REST &amp; streaming APIs</div><div class="tag">Cloud-native deployment</div></div>
     </div>
@@ -463,10 +404,7 @@
 <!-- ═══ CYBER SECURITY ═══ -->
 <section id="cyber" class="services-section">
   <div class="section-header">
-    <div>
-      <div class="section-label">02 / Service</div>
-      <h2 class="section-title">Cyber Security<br><span class="dim">Consultation</span></h2>
-    </div>
+    <div><div class="section-label">02 / Service</div><h2 class="section-title">Cyber Security<br><span class="dim">Consultation</span></h2></div>
     <p class="section-desc">Strategic security advice that maps to your actual business risk — not generic frameworks and checkbox compliance.</p>
   </div>
   <div class="cards-grid">
@@ -497,10 +435,7 @@
 <!-- ═══ BUSINESS SOLUTIONS ═══ -->
 <section id="solutions" class="services-section">
   <div class="section-header">
-    <div>
-      <div class="section-label">03 / Service</div>
-      <h2 class="section-title">Business<br><span class="dim">Solutions</span></h2>
-    </div>
+    <div><div class="section-label">03 / Service</div><h2 class="section-title">Business<br><span class="dim">Solutions</span></h2></div>
     <p class="section-desc">Integrated platforms for CRM, ERM, project and task management — connected, intelligent, built to scale.</p>
   </div>
   <div class="cards-grid-2">
@@ -583,6 +518,8 @@
     <p class="section-desc">AI-powered apps we built because we could. More dropping all the time.</p>
   </div>
   <div class="fun-apps-grid">
+
+    <!-- 04.01 For Her -->
     <div class="app-card app-pink fade-up">
       <div class="app-card-label pink">04.01</div>
       <div class="app-icon-wrap pink">
@@ -597,6 +534,8 @@
       </div>
       <a href="https://cynai.com.au/funapps/gf" class="app-launch-btn pink">Launch App</a>
     </div>
+
+    <!-- 04.02 For Him -->
     <div class="app-card app-blue fade-up">
       <div class="app-card-label blue">04.02</div>
       <div class="app-icon-wrap blue">
@@ -611,8 +550,55 @@
       </div>
       <a href="https://cynai.com.au/funapps/bf" class="app-launch-btn blue">Launch App</a>
     </div>
+
+    <!-- 04.03 ETF-DNA / ETF投資DNA ── NEW -->
+    <div class="app-card app-green fade-up">
+      <div class="app-card-label green">04.03</div>
+      <div class="app-icon-wrap green">
+        <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+          <rect x="3"  y="18" width="4" height="7" rx="1" fill="#39ff8c" opacity="0.7"/>
+          <rect x="8"  y="13" width="4" height="12" rx="1" fill="#39ff8c" opacity="0.7"/>
+          <rect x="13" y="8"  width="4" height="17" rx="1" fill="#39ff8c" opacity="0.9"/>
+          <rect x="18" y="11" width="4" height="14" rx="1" fill="#39ff8c" opacity="0.7"/>
+          <line x1="3" y1="22" x2="22" y2="8" stroke="#39ff8c" stroke-width="1" opacity="0.35" stroke-dasharray="2,2"/>
+        </svg>
+      </div>
+      <div class="app-card-title">ETF-DNA <span style="font-size:.8rem;font-weight:400;color:rgba(57,255,140,.45)">/ ETF投資DNA</span></div>
+      <div class="app-card-desc">12-question MBTI investment personality test. Find your investor type and get personalised ASX ETF portfolio recommendations — 3 strategies per type. 中文 &amp; English.</div>
+      <div class="app-tags">
+        <div class="app-tag green">12 questions · 16 MBTI types</div>
+        <div class="app-tag green">12 ASX ETFs · 3 portfolios/type</div>
+        <div class="app-tag green">中文 &amp; English</div>
+        <div class="app-tag" style="color:rgba(57,255,140,.3);font-size:.6rem">🎮 For fun &amp; education · Not financial advice</div>
+      </div>
+      <a href="https://cynai.com.au/funapps/etfdna" class="app-launch-btn green">Launch App</a>
+    </div>
+
+    <!-- 04.04 ETF-Sim / ETF財富模擬器 ── NEW -->
+    <div class="app-card app-amber fade-up">
+      <div class="app-card-label amber">04.04</div>
+      <div class="app-icon-wrap amber">
+        <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+          <polyline points="3,22 7,17 12,19 19,9 25,5" fill="none" stroke="#ffb830" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="25" cy="5" r="2.5" fill="#ffb830"/>
+          <line x1="3" y1="24" x2="25" y2="24" stroke="#ffb830" stroke-width="1" opacity="0.3"/>
+          <line x1="3" y1="5"  x2="3"  y2="24" stroke="#ffb830" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="app-card-title">ETF-Sim <span style="font-size:.8rem;font-weight:400;color:rgba(255,184,48,.45)">/ ETF財富模擬器</span></div>
+      <div class="app-card-desc">Simulate ASX ETF compound growth with inflation adjustment, CGT tax estimates, and 1,000-run Monte Carlo confidence bands. Annual data tables included. 中文 &amp; English.</div>
+      <div class="app-tags">
+        <div class="app-tag amber">Inflation &amp; CGT adjustment</div>
+        <div class="app-tag amber">Monte Carlo ×1,000 simulations</div>
+        <div class="app-tag amber">12 ASX ETFs · 中文 &amp; English</div>
+        <div class="app-tag" style="color:rgba(255,184,48,.3);font-size:.6rem">🎮 For fun &amp; education · Not financial advice</div>
+      </div>
+      <a href="https://cynai.com.au/funapps/etfsim" class="app-launch-btn amber">Launch App</a>
+    </div>
+
+    <!-- 04.05 More Coming -->
     <div class="app-card app-more fade-up">
-      <div class="app-card-label purple">04.03</div>
+      <div class="app-card-label purple">04.05</div>
       <div class="app-icon-wrap purple">
         <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><line x1="14" y1="4" x2="14" y2="24" stroke="#b06eff" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="14" x2="24" y2="14" stroke="#b06eff" stroke-width="1.8" stroke-linecap="round"/></svg>
       </div>
@@ -625,6 +611,7 @@
       </div>
       <div class="coming-soon-tag">Coming Soon</div>
     </div>
+
   </div>
 </section>
 
@@ -658,7 +645,6 @@
 </footer>
 
 <script>
-  /* ── Page cursor (desktop) ── */
   const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
   let mx=0,my=0,rx=0,ry=0;
   if(cursor){
@@ -669,32 +655,14 @@
       el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
     });
   }
-
-  /* ── Hamburger menu ── */
   const menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementById('navLinks');
-  menuBtn.addEventListener('click',()=>{
-    menuBtn.classList.toggle('open');
-    navLinks.classList.toggle('open');
-  });
-  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
-    menuBtn.classList.remove('open');
-    navLinks.classList.remove('open');
-  }));
-
-  /* ── Fade up ── */
+  menuBtn.addEventListener('click',()=>{menuBtn.classList.toggle('open');navLinks.classList.toggle('open');});
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menuBtn.classList.remove('open');navLinks.classList.remove('open');}));
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.08});
   document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
-
-  /* ── Smooth scroll ── */
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      e.preventDefault();
-      const t=document.querySelector(a.getAttribute('href'));
-      if(t)t.scrollIntoView({behavior:'smooth'});
-    });
+    a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});
   });
-
-  /* ── Hero title reveal ── */
   document.querySelectorAll('.hero-title .line').forEach((line,i)=>{
     line.style.opacity='0';line.style.transform='translateY(32px)';
     line.style.transition=`opacity .7s ease ${i*.13+.25}s,transform .7s ease ${i*.13+.25}s`;
