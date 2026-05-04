@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF投资DNA · ETF-DNA | cynai Fun Apps</title>
+<meta name="description" content="12题MBTI投资性格测试，找到最适合你的澳洲ETF组合。免费，无需注册。">
+<meta property="og:title" content="ETF-DNA · Discover Your ETF Investor Type">
+<meta property="og:description" content="12-question MBTI investment personality test. Get your ASX ETF portfolio recommendation.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@400;600&display=swap');
+:root {
+  --cream:#f5f0e8; --ink:#1a1612; --rust:#c44b2b; --gold:#b8923a;
+  --sage:#5a7a5e; --slate:#3d5069; --lilac:#7b6b9a;
+  --warm:#e8ddd0; --border:#d4c8b8; --muted:#8a7f74;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:999;}
+.app{max-width:680px;margin:0 auto;padding:0 20px 80px;}
+
+/* NAV */
+.topnav{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:0;}
+.topnav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
+.brand-logo{width:28px;height:28px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:12px;color:var(--cream);}
+.brand-name{font-size:13px;font-weight:700;}
+.brand-sub{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.topnav-right{display:flex;align-items:center;gap:14px;}
+.back-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.back-link:hover{color:var(--ink);}
+.lang-btn{font-size:11px;font-weight:700;letter-spacing:1px;padding:4px 12px;border:1.5px solid var(--border);background:none;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'Syne',sans-serif;}
+.lang-btn:hover{border-color:var(--ink);color:var(--ink);}
+
+/* COVER */
+#coverPage{padding-top:48px;}
+.cover-label{display:inline-block;background:var(--rust);color:white;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:5px 14px;margin-bottom:20px;}
+.cover-h1{font-family:'DM Serif Display','Noto Serif SC',serif;font-size:clamp(40px,9vw,72px);line-height:1.0;margin-bottom:8px;}
+.cover-h1 em{font-style:italic;color:var(--rust);}
+.cover-sub{font-size:13px;color:var(--muted);line-height:1.8;max-width:400px;margin-bottom:40px;border-left:3px solid var(--gold);padding-left:16px;}
+.cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:40px;}
+.cover-block{background:var(--ink);color:var(--cream);padding:20px;position:relative;overflow:hidden;}
+.cover-block:nth-child(2){background:var(--rust);}
+.cover-block:nth-child(3){background:var(--slate);}
+.cover-block:nth-child(4){background:var(--sage);}
+.cb-num{font-family:'DM Serif Display',serif;font-size:48px;line-height:1;opacity:.2;position:absolute;bottom:-8px;right:12px;}
+.cb-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+.cb-val{font-size:15px;font-weight:700;}
+.start-btn{background:var(--ink);color:var(--cream);border:none;padding:18px 48px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .2s;display:inline-block;}
+.start-btn:hover{background:var(--rust);transform:translateY(-2px);}
+
+/* QUIZ */
+#quizPage{display:none;padding-top:32px;}
+.q-header{border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;}
+.q-dim{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+.q-counter{font-family:'DM Serif Display',serif;font-size:32px;color:var(--rust);line-height:1;}
+.q-counter span{font-size:14px;color:var(--muted);font-family:'Syne',sans-serif;}
+.progress-track{height:3px;background:var(--border);margin-bottom:32px;}
+.progress-fill{height:100%;background:var(--rust);transition:width .5s cubic-bezier(.4,0,.2,1);}
+.q-text{font-family:'DM Serif Display','Noto Serif SC',serif;font-size:clamp(20px,3.5vw,28px);line-height:1.4;margin-bottom:8px;}
+.q-sub{font-size:12px;color:var(--muted);margin-bottom:28px;font-style:italic;}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.option{border:1.5px solid var(--border);background:white;padding:14px 18px;cursor:pointer;transition:all .18s;display:flex;align-items:flex-start;gap:14px;}
+.option:hover{border-color:var(--ink);transform:translateX(6px);}
+.option.sel{border-color:var(--rust);background:#fdf6f4;}
+.opt-letter{width:26px;height:26px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:var(--muted);transition:all .18s;}
+.option.sel .opt-letter{background:var(--rust);border-color:var(--rust);color:white;}
+.opt-body{flex:1;}
+.opt-main{font-size:13px;line-height:1.5;font-weight:600;margin-bottom:3px;}
+.opt-sub{font-size:11px;color:var(--muted);line-height:1.4;}
+.opt-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;background:var(--warm);color:var(--muted);margin-left:auto;flex-shrink:0;align-self:flex-start;margin-top:2px;}
+.option.sel .opt-tag{background:#f5e0da;color:var(--rust);}
+.q-nav{display:flex;gap:10px;}
+.btn-back{background:none;border:1.5px solid var(--border);color:var(--muted);padding:11px 22px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-back:hover{border-color:var(--ink);color:var(--ink);}
+.btn-next{background:var(--ink);color:var(--cream);border:none;padding:11px 28px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-next:hover:not(:disabled){background:var(--rust);}
+.btn-next:disabled{opacity:.3;cursor:not-allowed;}
+
+/* PREFS */
+#prefPage{display:none;padding-top:32px;}
+.pref-title{font-family:'DM Serif Display','Noto Serif SC',serif;font-size:26px;margin-bottom:8px;}
+.pref-sub{font-size:12px;color:var(--muted);margin-bottom:28px;border-left:3px solid var(--gold);padding-left:12px;}
+.pref-sec{margin-bottom:24px;}
+.pref-lbl{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block;}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:8px 14px;border:1.5px solid var(--border);background:white;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;line-height:1.4;}
+.chip:hover{border-color:var(--ink);}
+.chip.sel{background:var(--ink);color:var(--cream);border-color:var(--ink);}
+
+/* RESULT */
+#resultPage{display:none;padding-top:32px;}
+.result-banner{background:var(--ink);color:var(--cream);padding:32px;margin-bottom:2px;position:relative;overflow:hidden;}
+.result-banner::before{content:attr(data-mbti);position:absolute;right:-16px;top:-8px;font-family:'DM Serif Display',serif;font-size:130px;opacity:.06;line-height:1;color:white;pointer-events:none;}
+.result-issue{font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.5;margin-bottom:10px;}
+.result-mbti{font-family:'DM Serif Display',serif;font-size:60px;color:var(--rust);line-height:1;margin-bottom:6px;}
+.result-arch{font-family:'DM Serif Display','Noto Serif SC',serif;font-size:22px;margin-bottom:14px;}
+.result-desc{font-size:13px;line-height:1.9;opacity:.85;max-width:480px;}
+.result-dims{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:2px;}
+.dim-block{background:var(--warm);padding:12px;text-align:center;}
+.dim-letter{font-family:'DM Serif Display',serif;font-size:26px;color:var(--rust);}
+.dim-name{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.traits-row{background:white;border:1px solid var(--border);padding:14px 18px;margin-bottom:28px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.trait-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);color:var(--muted);}
+.portfolio-header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:18px;}
+.portfolio-title{font-family:'DM Serif Display',serif;font-size:20px;}
+.ptabs{display:flex;gap:2px;margin-bottom:18px;}
+.ptab{padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:var(--warm);border:none;color:var(--muted);font-family:'Syne',sans-serif;transition:all .2s;}
+.ptab.active{background:var(--ink);color:var(--cream);}
+.portfolio-panel{display:none;}
+.portfolio-panel.active{display:block;}
+.etf-row{display:grid;grid-template-columns:64px 1fr 88px;gap:0;border:1px solid var(--border);margin-bottom:8px;background:white;transition:transform .15s;}
+.etf-row:hover{transform:translateX(4px);}
+.etf-left{color:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;text-align:center;}
+.etf-ticker{font-family:'DM Serif Display',serif;font-size:15px;}
+.etf-wt{font-size:11px;opacity:.6;margin-top:2px;}
+.etf-mid{padding:12px 14px;}
+.etf-name{font-size:12px;font-weight:700;margin-bottom:3px;}
+.etf-desc{font-size:10px;color:var(--muted);line-height:1.5;}
+.etf-tags{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+.etf-tag{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 5px;background:var(--warm);color:var(--muted);}
+.etf-right{border-left:1px solid var(--border);padding:12px 10px;text-align:right;}
+.ret-item{margin-bottom:6px;}
+.ret-val{font-size:14px;font-weight:700;}
+.ret-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.pos{color:var(--sage)}.neg{color:var(--rust)}.gld{color:var(--gold);}
+.risk-meter{margin:20px 0;}
+.risk-track{height:5px;background:var(--warm);margin:6px 0;}
+.risk-fill{height:100%;transition:width .8s ease;}
+.risk-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.advice-box{border:1.5px solid var(--ink);padding:18px;margin-top:20px;position:relative;}
+.advice-box::before{content:'';position:absolute;top:-9px;left:16px;background:var(--cream);padding:0 8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rust);}
+.advice-box[data-label]::before{content:attr(data-label);}
+.advice-item{display:flex;gap:10px;margin-bottom:10px;font-size:12px;line-height:1.7;}
+.advice-item:last-child{margin-bottom:0;}
+
+/* Forge link banner */
+.forge-banner{background:#0a0e14;color:white;padding:18px 20px;margin:20px 0;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:opacity .2s;}
+.forge-banner:hover{opacity:.88;}
+.forge-banner-left .fb-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#ff6b00;margin-bottom:4px;}
+.forge-banner-left .fb-title{font-family:'DM Serif Display',serif;font-size:18px;}
+.forge-banner-left .fb-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.forge-arrow{font-size:24px;color:#ff6b00;}
+
+.disclaimer-box{border:1px solid var(--border);padding:12px 16px;margin-top:20px;font-size:10px;color:var(--muted);line-height:1.7;}
+.result-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:slideUp .4s ease forwards;}
+
+/* lang */
+.lang-en .zh{display:none!important;}
+.lang-zh .en{display:none!important;}
+@media(max-width:500px){
+  .cover-grid{grid-template-columns:1fr;}
+  .result-dims{grid-template-columns:repeat(2,1fr);}
+  .etf-row{grid-template-columns:52px 1fr;}
+  .etf-right{display:none;}
+}
+</style>
+</head>
+<body class="lang-zh">
+
+<!-- DISCLAIMER BANNER -->
+<div id="discBanner" style="background:#fff3cd;border-bottom:2px solid #f5a623;padding:10px 20px;text-align:center;font-size:11px;font-family:'Syne',sans-serif;position:sticky;top:0;z-index:9998;display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;">
+  <span style="font-size:14px">🎮</span>
+  <span class="zh"><b>仅供娱乐 &amp; 教育参考</b> · 本工具不构成任何投资建议。历史回报不代表未来表现。投资前请咨询持牌财务顾问。</span>
+  <span class="en"><b>For fun &amp; educational use only</b> · This tool does NOT constitute financial advice. Past returns ≠ future results. Consult a licensed financial adviser before investing.</span>
+  <button onclick="document.getElementById('discBanner').style.display='none'" style="background:none;border:1px solid #b8923a;color:#b8923a;cursor:pointer;font-size:10px;padding:2px 8px;font-family:'Syne',sans-serif;flex-shrink:0;">✕ <span class="zh">知道了</span><span class="en">Got it</span></button>
+</div>
+<div class="app">
+
+<nav class="topnav">
+  <a class="topnav-brand" href="https://cynai.com.au">
+    <div class="brand-logo">cy</div>
+    <div><div class="brand-name">cynai</div><div class="brand-sub">Fun Labs</div></div>
+  </a>
+  <div class="topnav-right">
+    <a class="back-link zh" href="https://cynai.com.au">← 首页</a>
+    <a class="back-link en" href="https://cynai.com.au">← Home</a>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
+  </div>
+</nav>
+
+<!-- COVER -->
+<div id="coverPage">
+  <div style="padding-top:44px">
+    <div class="cover-label zh">ETF投资DNA</div>
+    <div class="cover-label en">ETF-DNA · Investor Personality</div>
+    <h1 class="cover-h1 zh">发现你的<br><em>投资基因</em></h1>
+    <h1 class="cover-h1 en">Discover Your<br><em>Investor DNA</em></h1>
+    <p class="cover-sub zh">基于MBTI框架的12题测试，涵盖6个投资维度。获取你的类型档案 + 3套专属ETF组合方案。</p>
+    <p class="cover-sub en">A 12-question test based on MBTI, covering 6 investment dimensions. Get your investor profile + 3 tailored ASX ETF portfolios.</p>
+    <div class="cover-grid">
+      <div class="cover-block"><div class="cb-lbl zh">测试维度</div><div class="cb-lbl en">Dimensions</div><div class="cb-val zh">6个核心维度</div><div class="cb-val en">6 Core Dimensions</div><div class="cb-num">6</div></div>
+      <div class="cover-block"><div class="cb-lbl zh">MBTI类型</div><div class="cb-lbl en">MBTI Types</div><div class="cb-val zh">16种投资性格</div><div class="cb-val en">16 Investor Types</div><div class="cb-num">16</div></div>
+      <div class="cover-block"><div class="cb-lbl zh">ETF数据库</div><div class="cb-lbl en">ETF Database</div><div class="cb-val zh">12只ASX精选</div><div class="cb-val en">12 ASX ETFs</div><div class="cb-num">12</div></div>
+      <div class="cover-block"><div class="cb-lbl zh">组合方案</div><div class="cb-lbl en">Portfolios</div><div class="cb-val zh">每型3套策略</div><div class="cb-val en">3 Strategies/Type</div><div class="cb-num">3</div></div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()"><span class="zh">开始测试 →</span><span class="en">Start Test →</span></button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quizPage">
+  <div class="q-header">
+    <div><div class="q-dim" id="qDim"></div></div>
+    <div class="q-counter"><span>Q</span><span id="qNum">01</span><span style="font-family:Syne;font-size:14px;color:var(--muted)">/12</span></div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  <div class="q-text" id="qText"></div>
+  <div class="q-sub" id="qSub"></div>
+  <div class="options" id="opts"></div>
+  <div class="q-nav">
+    <button class="btn-back" id="btnBack" onclick="prevQ()" disabled><span class="zh">← 返回</span><span class="en">← Back</span></button>
+    <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>...</button>
+  </div>
+</div>
+
+<!-- PREFS -->
+<div id="prefPage">
+  <div class="pref-title zh">最后一步：投资偏好</div>
+  <div class="pref-title en">One More Step: Your Preferences</div>
+  <p class="pref-sub zh">帮我们为你推荐最合适的组合方案</p>
+  <p class="pref-sub en">This helps us recommend the best portfolio strategy for you</p>
+  <div class="pref-sec">
+    <span class="pref-lbl zh">💰 初始可投资金额（AUD）</span>
+    <span class="pref-lbl en">💰 Initial investment amount (AUD)</span>
+    <div class="chip-row">
+      <div class="chip" data-g="amt" data-v="s" onclick="selChip(this,'amt')"><span class="zh">$1K–$5K 刚起步</span><span class="en">$1K–$5K Starting out</span></div>
+      <div class="chip" data-g="amt" data-v="m" onclick="selChip(this,'amt')"><span class="zh">$5K–$20K 有积累</span><span class="en">$5K–$20K Growing</span></div>
+      <div class="chip" data-g="amt" data-v="l" onclick="selChip(this,'amt')"><span class="zh">$20K–$100K 成熟期</span><span class="en">$20K–$100K Established</span></div>
+      <div class="chip" data-g="amt" data-v="xl" onclick="selChip(this,'amt')"><span class="zh">$100K+ 资深投资者</span><span class="en">$100K+ Experienced</span></div>
+    </div>
+  </div>
+  <div class="pref-sec">
+    <span class="pref-lbl zh">⏳ 计划持有多久</span>
+    <span class="pref-lbl en">⏳ Investment horizon</span>
+    <div class="chip-row">
+      <div class="chip" data-g="horiz" data-v="s" onclick="selChip(this,'horiz')"><span class="zh">1-3年</span><span class="en">1-3 years</span></div>
+      <div class="chip" data-g="horiz" data-v="m" onclick="selChip(this,'horiz')"><span class="zh">3-7年</span><span class="en">3-7 years</span></div>
+      <div class="chip" data-g="horiz" data-v="l" onclick="selChip(this,'horiz')"><span class="zh">7-15年</span><span class="en">7-15 years</span></div>
+      <div class="chip" data-g="horiz" data-v="xl" onclick="selChip(this,'horiz')"><span class="zh">15年以上</span><span class="en">15+ years</span></div>
+    </div>
+  </div>
+  <div class="pref-sec">
+    <span class="pref-lbl zh">🎯 你最看重什么</span>
+    <span class="pref-lbl en">🎯 What matters most to you</span>
+    <div class="chip-row">
+      <div class="chip" data-g="goal" data-v="growth" onclick="selChip(this,'goal')"><span class="zh">资本增值</span><span class="en">Capital growth</span></div>
+      <div class="chip" data-g="goal" data-v="income" onclick="selChip(this,'goal')"><span class="zh">被动收入</span><span class="en">Passive income</span></div>
+      <div class="chip" data-g="goal" data-v="safety" onclick="selChip(this,'goal')"><span class="zh">资产保值</span><span class="en">Capital preservation</span></div>
+      <div class="chip" data-g="goal" data-v="retire" onclick="selChip(this,'goal')"><span class="zh">退休规划</span><span class="en">Retirement planning</span></div>
+    </div>
+  </div>
+  <div class="pref-sec">
+    <span class="pref-lbl zh">📉 持仓跌20%，你的反应是</span>
+    <span class="pref-lbl en">📉 If your portfolio drops 20%, you would</span>
+    <div class="chip-row">
+      <div class="chip" data-g="draw" data-v="buy" onclick="selChip(this,'draw')"><span class="zh">🔥 加仓买入</span><span class="en">🔥 Buy more</span></div>
+      <div class="chip" data-g="draw" data-v="hold" onclick="selChip(this,'draw')"><span class="zh">😐 持有不动</span><span class="en">😐 Hold steady</span></div>
+      <div class="chip" data-g="draw" data-v="worry" onclick="selChip(this,'draw')"><span class="zh">😰 担心但坚持</span><span class="en">😰 Worry but hold</span></div>
+      <div class="chip" data-g="draw" data-v="sell" onclick="selChip(this,'draw')"><span class="zh">🚨 减仓止损</span><span class="en">🚨 Reduce/exit</span></div>
+    </div>
+  </div>
+  <div class="q-nav" style="margin-top:28px">
+    <button class="btn-back" onclick="showQuiz()"><span class="zh">← 返回</span><span class="en">← Back</span></button>
+    <button class="btn-next" id="prefNext" onclick="computeResult()" disabled><span class="zh">查看结果 →</span><span class="en">See Results →</span></button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="resultPage"></div>
+
+</div>
+<script>
+// ── I18N ──
+const Q = {
+  zh:[
+    {dim:'维度 1 · 波动心理',text:'市场突然暴跌15%，你的第一反应是？',sub:'考验你在压力下的本能决策',a:{text:'冷静分析，可能是买入好机会',sub:'把下跌看作折扣',tag:'理性主导',val:'E'},b:{text:'感到不安，开始频繁查看账户',sub:'波动让我情绪受影响',tag:'情感主导',val:'I'}},
+    {dim:'维度 1 · 波动心理',text:'你能接受自己投资组合某年下跌多少？',sub:'你的实际风险承受力',a:{text:'30%以上都OK，长期会回来的',sub:'相信均值回归',tag:'高承受力',val:'E'},b:{text:'超过10%就会让我寝食难安',sub:'稳定性优先',tag:'低承受力',val:'I'}},
+    {dim:'维度 2 · 时间视野',text:'你做投资的核心逻辑是？',sub:'反映你的时间观',a:{text:'10年后的自己比明天账户更重要',sub:'延迟满足，长期复利',tag:'长期主义',val:'N'},b:{text:'看得见的增长才有动力继续',sub:'短期反馈驱动决策',tag:'短期视角',val:'S'}},
+    {dim:'维度 2 · 时间视野',text:'你更认同哪个投资哲学？',sub:'你的投资世界观',a:{text:'"时间是最好的投资者，坐等复利生长"',sub:'巴菲特派',tag:'复利信仰',val:'N'},b:{text:'"市场机会转瞬即逝，要懂得择时"',sub:'主动交易派',tag:'择时思维',val:'S'}},
+    {dim:'维度 3 · 决策风格',text:'选择ETF时，你最倚重哪类信息？',sub:'你的分析习惯',a:{text:'历史回报、费率、基准追踪误差等数据',sub:'量化为主',tag:'数据驱动',val:'T'},b:{text:'这个赛道的感觉、趋势方向、热门程度',sub:'判断为主',tag:'直觉驱动',val:'F'}},
+    {dim:'维度 3 · 决策风格',text:'朋友力推一只热门ETF但数据不突出，你会？',sub:'测试你的独立判断力',a:{text:'不看感觉，数据说不过去就不买',sub:'逻辑优先',tag:'理性优先',val:'T'},b:{text:'大家都看好，跟着买应该没错',sub:'社会认同效应',tag:'情绪跟随',val:'F'}},
+    {dim:'维度 4 · 管理习惯',text:'买入ETF后，你打算怎么管理？',sub:'反映你的投资操作偏好',a:{text:'设好定投，一年最多看两次',sub:'"懒人"是最好的策略',tag:'被动持有',val:'J'},b:{text:'定期分析，市场有变化会主动调整',sub:'主动参与感',tag:'主动管理',val:'P'}},
+    {dim:'维度 4 · 管理习惯',text:'你更能接受哪种错误？',sub:'两难选择揭示你的决策偏好',a:{text:'错过了大涨（因为太保守没进场）',sub:'sins of omission',tag:'稳健为先',val:'J'},b:{text:'买错了亏了（因为判断失误进场）',sub:'sins of commission',tag:'敢于行动',val:'P'}},
+    {dim:'维度 5 · 地域配置',text:'你更倾向于哪种地域配置？',sub:'全球化 vs 聚焦特定市场',a:{text:'全球分散，不把鸡蛋放一个篮子里',sub:'VGS / IVV 型',tag:'全球分散',val:'G'},b:{text:'聚焦特定市场（美国/亚洲）追高回报',sub:'NDQ / ASIA 型',tag:'集中配置',val:'D'}},
+    {dim:'维度 5 · 主题偏好',text:'对AI、网络安全、国防等主题ETF，你的态度？',sub:'测试你对集中风险的接受度',a:{text:'有意思，愿意拿出20-30%配置主题ETF',sub:'主题增强收益',tag:'主题偏好',val:'D'},b:{text:'主题太窄，还是宽基更让我安心',sub:'宽基优先',tag:'宽基偏好',val:'G'}},
+    {dim:'维度 6 · 费率意识',text:'0.04% vs 0.67%的管理费差距，你怎么看？',sub:'10万投资，差距约630澳元/年',a:{text:'长期差异巨大，费率是我选ETF的核心标准',sub:'沃伦·巴菲特的观点',tag:'成本敏感',val:'C'},b:{text:'如果高费率带来更高回报，值得',sub:'结果导向',tag:'回报敏感',val:'V'}},
+    {dim:'维度 6 · 风格偏好',text:'你更偏向哪种投资风格？',sub:'被动指数 vs 主动/因子',a:{text:'被动指数，市场本来就很难被跑赢',sub:'Bogle指数基金理念',tag:'指数信仰',val:'C'},b:{text:'愿意尝试因子ETF，追求超额收益',sub:'Alpha猎手',tag:'超额收益',val:'V'}},
+  ],
+  en:[
+    {dim:'Dimension 1 · Volatility',text:'Markets suddenly drop 15%. Your first instinct is?',sub:'Tests your gut reaction under pressure',a:{text:'Stay calm — this could be a buying opportunity',sub:'See dips as discounts',tag:'Rational',val:'E'},b:{text:'Feel uneasy, start checking your portfolio constantly',sub:'Volatility affects my emotions',tag:'Emotional',val:'I'}},
+    {dim:'Dimension 1 · Volatility',text:'How much annual decline could you tolerate in your portfolio?',sub:'Your real risk tolerance',a:{text:'Even 30%+ is fine — it always comes back long-term',sub:'Trust mean reversion',tag:'High tolerance',val:'E'},b:{text:'Anything over 10% and I can\'t sleep',sub:'Stability is priority',tag:'Low tolerance',val:'I'}},
+    {dim:'Dimension 2 · Time Horizon',text:'What\'s your core investing logic?',sub:'Reveals your relationship with time',a:{text:'My future self in 10 years matters more than tomorrow\'s balance',sub:'Delayed gratification, compound growth',tag:'Long-term',val:'N'},b:{text:'I need to see visible gains to stay motivated',sub:'Short-term feedback driven',tag:'Short-term',val:'S'}},
+    {dim:'Dimension 2 · Time Horizon',text:'Which investing philosophy resonates more?',sub:'Your investment worldview',a:{text:'"Time is the best investor — sit back and let compounding work"',sub:'Buffett camp',tag:'Compound believer',val:'N'},b:{text:'"Markets move fast — timing entries and exits is key"',sub:'Active trader camp',tag:'Market timer',val:'S'}},
+    {dim:'Dimension 3 · Decision Style',text:'When choosing an ETF, what do you rely on most?',sub:'Your analysis habits',a:{text:'Historical returns, MER fees, tracking error — hard data',sub:'Quantitative approach',tag:'Data-driven',val:'T'},b:{text:'The feel of the sector, trends, what\'s popular right now',sub:'Judgment-based',tag:'Intuition-led',val:'F'}},
+    {dim:'Dimension 3 · Decision Style',text:'A friend hypes a hot ETF but the numbers aren\'t great. You:',sub:'Tests your independent thinking',a:{text:'Skip it — if the data doesn\'t support it, I don\'t buy',sub:'Logic first',tag:'Rational first',val:'T'},b:{text:'If everyone\'s bullish, there must be something to it',sub:'Social proof effect',tag:'Emotion-led',val:'F'}},
+    {dim:'Dimension 4 · Management Style',text:'Once you buy an ETF, how do you plan to manage it?',sub:'Reflects your operational preference',a:{text:'Set up auto-invest and check maybe twice a year',sub:'"Lazy" is actually the best strategy',tag:'Passive holder',val:'J'},b:{text:'Review regularly and adjust if market conditions change',sub:'Active engagement',tag:'Active manager',val:'P'}},
+    {dim:'Dimension 4 · Management Style',text:'Which mistake could you live with more?',sub:'A dilemma that reveals your decision style',a:{text:'Missing a big rally (too cautious to enter)',sub:'Sins of omission',tag:'Caution-first',val:'J'},b:{text:'Buying in and losing (misjudged the market)',sub:'Sins of commission',tag:'Action-oriented',val:'P'}},
+    {dim:'Dimension 5 · Geographic Focus',text:'Which allocation approach suits you better?',sub:'Global diversification vs concentrated bets',a:{text:'Global diversification — don\'t put all eggs in one basket',sub:'VGS / IVV style',tag:'Global spread',val:'G'},b:{text:'Focus on high-growth markets like the US or Asia',sub:'NDQ / ASIA style',tag:'Concentrated',val:'D'}},
+    {dim:'Dimension 5 · Thematic Preference',text:'What\'s your view on thematic ETFs (AI, cybersecurity, defence)?',sub:'Tests your appetite for concentrated risk',a:{text:'Interesting — happy to put 20–30% into themes',sub:'Thematic for extra returns',tag:'Theme-seeker',val:'D'},b:{text:'Too narrow — broad-market ETFs let me sleep better',sub:'Broad-market preference',tag:'Broad-market',val:'G'}},
+    {dim:'Dimension 6 · Cost Awareness',text:'0.04% vs 0.67% MER — how do you see that gap?',sub:'That\'s ~$630/yr difference on a $100K portfolio',a:{text:'Massive long-term impact — fees are a core selection criterion',sub:'Warren Buffett\'s view',tag:'Cost-sensitive',val:'C'},b:{text:'If higher fees deliver better returns, they\'re worth it',sub:'Outcome-focused',tag:'Return-focused',val:'V'}},
+    {dim:'Dimension 6 · Style Preference',text:'Which investing style appeals to you more?',sub:'Passive index vs active/factor',a:{text:'Passive index — it\'s very hard to beat the market consistently',sub:'Jack Bogle\'s core belief',tag:'Index believer',val:'C'},b:{text:'Open to factor ETFs or active strategies for alpha',sub:'Alpha seeker',tag:'Alpha hunter',val:'V'}},
+  ]
+};
+
+const ARCH = {
+  zh:{
+    ENTJ:{name:'远见领袖型',color:'#c44b2b',risk:9,desc:'你有强烈的长期主义信念，愿意承担高波动换取最大化增长。你是科技赛道的忠实信徒，相信AI与数字化将改变世界。'},
+    ENTP:{name:'革新探索型',color:'#c44b2b',risk:8,desc:'你热衷于新兴趋势，喜欢在别人犹豫时率先布局。你相信颠覆性技术的力量，愿意用集中持仓换取超额回报。'},
+    INTJ:{name:'战略架构师',color:'#3d5069',risk:7,desc:'你用系统化思维构建投资体系，极度理性。你不追热点，而是寻找被低估的长期资产，用精密逻辑而非情绪决策。'},
+    INTP:{name:'深度研究者',color:'#3d5069',risk:6,desc:'你是数据的朋友，热爱深度分析。你会花时间研究费率、指数构成、历史回报，然后做出极具逻辑性的配置决策。'},
+    ENFJ:{name:'价值传播者',color:'#5a7a5e',risk:6,desc:'你关注社会趋势和大局，投资决策融合了理性与价值观。你倾向于有长远影响力的行业，而不是纯粹追数字。'},
+    ENFP:{name:'创意冒险者',color:'#b8923a',risk:7,desc:'你对未来充满想象力，容易被创新和趋势感染。你愿意承担风险，但有时需要提醒自己保持分散化纪律。'},
+    INFJ:{name:'洞见追求者',color:'#7b6b9a',risk:5,desc:'你有独到的直觉判断力，能看到别人忽视的趋势。投资时会把长期价值放在首位，对短期噪音有较好的免疫力。'},
+    INFP:{name:'价值守护者',color:'#7b6b9a',risk:4,desc:'你重视投资与个人价值观的一致性，倾向于稳健可持续的配置。你可以为长期目标忍受短期波动，但不喜欢高度不确定性。'},
+    ESTJ:{name:'务实管理者',color:'#5a7a5e',risk:4,desc:'你重视秩序、规则和可预测性。你偏好经过市场验证的成熟ETF，不喜欢主题类的高波动性，稳健性是核心诉求。'},
+    ESTP:{name:'市场冲浪者',color:'#c44b2b',risk:8,desc:'你反应灵敏，喜欢抓住市场节奏。你不介意持仓的高波动，反而从中找到机会。需注意避免过度交易的摩擦成本。'},
+    ISTJ:{name:'稳健守成者',color:'#5a7a5e',risk:3,desc:'你是最可靠的投资者之一。坚守纪律，不被情绪左右，定投低成本宽基是你的核心策略。简单但极为有效。'},
+    ISTP:{name:'精算实践者',color:'#3d5069',risk:6,desc:'你善于独立分析，不跟风。你会仔细计算每一分费率的影响，追求最优风险调整后回报，是典型的效率优化者。'},
+    ESFJ:{name:'社群守护者',color:'#5a7a5e',risk:3,desc:'你重视稳定和确定性，投资是为了家庭和未来安全感而非刺激。低波动、分散的宽基ETF最能让你安心持有。'},
+    ESFP:{name:'活力体验者',color:'#b8923a',risk:7,desc:'你对新事物充满热情，容易被市场热点感染。你的优势是行动力，需要建立一套纪律防止追高杀低。'},
+    ISFJ:{name:'温和保守者',color:'#5a7a5e',risk:2,desc:'你把安全感放在第一位。你的投资可能不会是最激进的，但绝对是最能陪你睡好觉的。坚持优质宽基是最优解。'},
+    ISFP:{name:'感性随心者',color:'#7b6b9a',risk:4,desc:'你投资时会考虑情感因素，偶尔会被故事和概念打动。建立核心宽基仓位后，用小仓位满足探索欲，两全其美。'},
+  },
+  en:{
+    ENTJ:{name:'Visionary Commander',color:'#c44b2b',risk:9,desc:'You have strong long-term conviction and willingness to endure high volatility for maximum growth. A true believer in tech and digital transformation as wealth creators.'},
+    ENTP:{name:'Innovative Explorer',color:'#c44b2b',risk:8,desc:'You love spotting emerging trends before others do. You believe in disruptive technology and are willing to concentrate positions for outsized returns.'},
+    INTJ:{name:'Strategic Architect',color:'#3d5069',risk:7,desc:'You build investment frameworks with systematic logic. You don\'t chase trends — you find undervalued long-term assets and stick to the plan, not emotions.'},
+    INTP:{name:'Deep Analyst',color:'#3d5069',risk:6,desc:'You\'re a data friend who loves going deep. You\'ll spend time studying fees, index composition, and historical returns before making a highly logical allocation decision.'},
+    ENFJ:{name:'Values Visionary',color:'#5a7a5e',risk:6,desc:'You consider social trends and the bigger picture. Your investing blends rationality with values — you gravitate toward sectors with lasting impact, not just numbers.'},
+    ENFP:{name:'Creative Adventurer',color:'#b8923a',risk:7,desc:'You\'re imagination-rich and easily inspired by innovation. You\'re willing to take risks, but sometimes need a reminder to maintain diversification discipline.'},
+    INFJ:{name:'Intuitive Seeker',color:'#7b6b9a',risk:5,desc:'You have sharp intuitive judgment and spot trends others miss. You prioritise long-term value and have good immunity to short-term market noise.'},
+    INFP:{name:'Values Guardian',color:'#7b6b9a',risk:4,desc:'You care about alignment between your investments and your values. You can tolerate short-term volatility for long-term goals, but dislike extreme uncertainty.'},
+    ESTJ:{name:'Pragmatic Manager',color:'#5a7a5e',risk:4,desc:'You value order, rules, and predictability. You prefer time-tested ETFs and dislike thematic volatility. Reliability is your core requirement.'},
+    ESTP:{name:'Market Surfer',color:'#c44b2b',risk:8,desc:'You\'re sharp and love riding market rhythms. High volatility doesn\'t scare you — it creates opportunities. Watch out for over-trading friction costs.'},
+    ISTJ:{name:'Steady Custodian',color:'#5a7a5e',risk:3,desc:'You\'re one of the most reliable investor types. Disciplined, unemotional, committed to low-cost broad-market DCA. Simple — and extremely effective.'},
+    ISTP:{name:'Precision Practitioner',color:'#3d5069',risk:6,desc:'You analyse independently and don\'t follow the crowd. You calculate the impact of every basis point in fees, optimising for risk-adjusted returns.'},
+    ESFJ:{name:'Community Protector',color:'#5a7a5e',risk:3,desc:'You value stability and certainty. Investing is about family security, not excitement. Low-volatility, diversified broad-market ETFs suit you perfectly.'},
+    ESFP:{name:'Enthusiastic Explorer',color:'#b8923a',risk:7,desc:'You\'re excited by new things and easily inspired by market themes. Your strength is taking action — build discipline to avoid buying high and selling low.'},
+    ISFJ:{name:'Gentle Protector',color:'#5a7a5e',risk:2,desc:'Safety comes first. Your portfolio won\'t be the most aggressive, but it\'ll let you sleep well. Staying consistent with quality broad-market ETFs is your optimal path.'},
+    ISFP:{name:'Intuitive Wanderer',color:'#7b6b9a',risk:4,desc:'You invest with feeling and can be moved by a compelling story. Build a core broad-market position, then use a small allocation for exploration — best of both worlds.'},
+  }
+};
+
+const ETFS = {
+  IVV:{name:'iShares S&P 500 ETF',color:'#2c4a6e',mer:'0.04%',r1:'+6.9%',r3:'+58.8%',r5:'+87.4%',
+    tags:{zh:['美国大盘','宽基','超低费率'],en:['US Large-cap','Broad','Ultra-low MER']},
+    desc:{zh:'标普500，全球最重要的市场指数，5年累计回报87.4%',en:'S&P 500 — the world\'s most important index, 87.4% over 5 years'}},
+  VGS:{name:'Vanguard MSCI World ex-AU',color:'#3d5069',mer:'0.18%',r1:'+7.8%',r3:'+53.5%',r5:'+74.7%',
+    tags:{zh:['全球分散','发达市场','蓝筹'],en:['Global spread','Developed mkts','Blue chip']},
+    desc:{zh:'23个发达市场·1300家公司，澳洲第二大ETF',en:'23 developed markets · 1,300 companies · Australia\'s 2nd largest ETF'}},
+  NDQ:{name:'BetaShares Nasdaq 100',color:'#5a3a7a',mer:'0.48%',r1:'+11.3%',r3:'+73.3%',r5:'+92.3%',
+    tags:{zh:['科技成长','纳斯达克','高波动'],en:['Tech growth','Nasdaq','Higher vol']},
+    desc:{zh:'全球科技巨头集合，AI/云/半导体核心受益者',en:'Global tech giants — the core AI, cloud & semiconductor play'}},
+  FANG:{name:'Global X FANG+ ETF',color:'#c44b2b',mer:'0.35%',r1:'+8.2%',r3:'+115.5%',r5:'+109.9%',
+    tags:{zh:['超集中','科技巨头','高波动'],en:['Concentrated','Mega-cap tech','High vol']},
+    desc:{zh:'10只科技巨头等权重，3年回报超115%',en:'10 mega-cap tech stocks equal-weighted · 3yr return 115%+'}},
+  ASIA:{name:'BetaShares Asia Tech Tigers',color:'#b8923a',mer:'0.67%',r1:'+32.9%',r3:'+88.0%',r5:'+25.9%',
+    tags:{zh:['亚洲科技','中台韩印','高成长'],en:['Asia tech','CN/TW/KR/IN','High growth']},
+    desc:{zh:'中国AI+台积电+三星，亚洲科技周期受益者',en:'China AI + TSMC + Samsung — riding the Asia tech supercycle'}},
+  HACK:{name:'BetaShares Cybersecurity',color:'#5a6a7a',mer:'0.67%',r1:'-9.9%',r3:'+44.0%',r5:'+60.4%',
+    tags:{zh:['网络安全','防御科技','刚需'],en:['Cybersecurity','Defensive tech','Essential']},
+    desc:{zh:'全球网络安全刚需赛道，主题类5年表现最稳',en:'Global cybersecurity — essential spending, best 5yr thematic return'}},
+  RBTZ:{name:'BetaShares Global Robotics & AI',color:'#4a5a6a',mer:'0.57%',r1:'+4.1%',r3:'+26.5%',r5:'+10.5%',
+    tags:{zh:['机器人','自动化','日欧龙头'],en:['Robotics','Automation','JP/EU leaders']},
+    desc:{zh:'Fanuc/Keyence等制造自动化龙头，AI落地受益者',en:'Fanuc/Keyence — automation giants benefiting from AI deployment'}},
+  DFND:{name:'VanEck Global Defence ETF',color:'#3d6b52',mer:'0.65%',r1:'+54.6%',r3:'N/A',r5:'N/A',
+    tags:{zh:['国防航天','地缘政治','新主题'],en:['Defence','Geopolitics','New theme']},
+    desc:{zh:'1年回报54.6%，受益全球国防预算大扩张',en:'1yr return 54.6% — riding global defence budget expansion'}},
+  SEMI:{name:'Global X Semiconductor ETF',color:'#8b1a1a',mer:'0.45%',r1:'+67.2%',r3:'+152.3%',r5:'N/A',
+    tags:{zh:['芯片半导体','AI基础设施','超高波动'],en:['Semiconductors','AI infra','Very high vol']},
+    desc:{zh:'英伟达/台积电/ASML，3年回报152%',en:'Nvidia / TSMC / ASML — 3yr return 152%'}},
+  VEU:{name:'Vanguard All-World ex-US ETF',color:'#2a5a4a',mer:'0.07%',r1:'+13.3%',r3:'+43.6%',r5:'+48.9%',
+    tags:{zh:['非美全球','新兴+发达','地理分散'],en:['ex-US global','EM + developed','Geographic spread']},
+    desc:{zh:'美国以外全球配置，近期受益美元走弱',en:'ex-US global exposure — benefiting from recent USD weakness'}},
+  IHVV:{name:'iShares S&P 500 AUD Hedged',color:'#1a3a6a',mer:'0.10%',r1:'+15.3%',r3:'+55.4%',r5:'+47.6%',
+    tags:{zh:['汇率对冲','美股','AUD保护'],en:['Currency hedged','US stocks','AUD protection']},
+    desc:{zh:'汇率对冲版S&P500，澳元走强时优于IVV',en:'Hedged S&P 500 — outperforms IVV when AUD strengthens'}},
+  BGBL:{name:'BetaShares Global Shares ETF',color:'#2a3a4a',mer:'0.08%',r1:'+8.4%',r3:'N/A',r5:'N/A',
+    tags:{zh:['全球宽基','超低费率','新基金'],en:['Global broad','Ultra-low MER','Newer fund']},
+    desc:{zh:'与VGS同一指数，费率仅0.08%，低成本替代',en:'Same index as VGS, just 0.08% MER — the low-cost alternative'}},
+};
+
+const PORT = {
+  ENTJ:{conservative:[['IVV',40],['NDQ',35],['ASIA',15],['SEMI',10]],balanced:[['NDQ',40],['FANG',25],['ASIA',20],['IVV',15]],aggressive:[['FANG',35],['SEMI',30],['ASIA',25],['NDQ',10]]},
+  ENTP:{conservative:[['VGS',35],['NDQ',30],['ASIA',20],['DFND',15]],balanced:[['NDQ',35],['FANG',25],['ASIA',25],['DFND',15]],aggressive:[['FANG',40],['SEMI',30],['ASIA',20],['RBTZ',10]]},
+  INTJ:{conservative:[['IVV',45],['VGS',35],['NDQ',20]],balanced:[['IVV',40],['NDQ',30],['VGS',20],['HACK',10]],aggressive:[['NDQ',40],['IVV',30],['ASIA',20],['SEMI',10]]},
+  INTP:{conservative:[['IVV',50],['VGS',30],['BGBL',20]],balanced:[['IVV',40],['VGS',30],['NDQ',20],['HACK',10]],aggressive:[['IVV',35],['NDQ',35],['SEMI',20],['RBTZ',10]]},
+  ISTJ:{conservative:[['VGS',60],['IVV',40]],balanced:[['VGS',50],['IVV',30],['NDQ',20]],aggressive:[['IVV',40],['VGS',30],['NDQ',20],['HACK',10]]},
+  ISFJ:{conservative:[['VGS',70],['IHVV',30]],balanced:[['VGS',60],['IVV',30],['VEU',10]],aggressive:[['VGS',50],['IVV',30],['NDQ',20]]},
+  ESTJ:{conservative:[['VGS',60],['IVV',40]],balanced:[['VGS',50],['IVV',30],['IHVV',20]],aggressive:[['IVV',40],['VGS',30],['NDQ',20],['VEU',10]]},
+  ESFJ:{conservative:[['IHVV',50],['VGS',50]],balanced:[['VGS',50],['IHVV',30],['VEU',20]],aggressive:[['VGS',40],['IVV',30],['NDQ',20],['VEU',10]]},
+  ENFJ:{conservative:[['VGS',50],['IVV',30],['VEU',20]],balanced:[['VGS',40],['NDQ',30],['VEU',20],['HACK',10]],aggressive:[['NDQ',35],['VGS',30],['ASIA',25],['DFND',10]]},
+  ENFP:{conservative:[['VGS',40],['IVV',30],['ASIA',20],['HACK',10]],balanced:[['NDQ',35],['ASIA',30],['IVV',20],['DFND',15]],aggressive:[['FANG',30],['ASIA',30],['NDQ',25],['RBTZ',15]]},
+  INFJ:{conservative:[['VGS',55],['IVV',30],['VEU',15]],balanced:[['VGS',45],['NDQ',30],['IVV',15],['VEU',10]],aggressive:[['NDQ',40],['VGS',30],['ASIA',20],['HACK',10]]},
+  INFP:{conservative:[['VGS',60],['IHVV',40]],balanced:[['VGS',50],['IVV',30],['HACK',20]],aggressive:[['VGS',40],['NDQ',30],['ASIA',20],['RBTZ',10]]},
+  ESTP:{conservative:[['NDQ',35],['IVV',30],['ASIA',25],['DFND',10]],balanced:[['FANG',30],['NDQ',30],['ASIA',25],['SEMI',15]],aggressive:[['FANG',35],['SEMI',30],['ASIA',25],['RBTZ',10]]},
+  ESFP:{conservative:[['VGS',40],['NDQ',30],['ASIA',20],['IVV',10]],balanced:[['NDQ',35],['ASIA',30],['VGS',25],['DFND',10]],aggressive:[['FANG',30],['ASIA',30],['NDQ',25],['SEMI',15]]},
+  ISTP:{conservative:[['IVV',50],['BGBL',30],['HACK',20]],balanced:[['IVV',40],['NDQ',30],['VGS',20],['RBTZ',10]],aggressive:[['NDQ',40],['SEMI',25],['IVV',20],['RBTZ',15]]},
+  ISFP:{conservative:[['VGS',55],['IVV',35],['HACK',10]],balanced:[['VGS',45],['IVV',30],['NDQ',15],['ASIA',10]],aggressive:[['NDQ',35],['VGS',30],['ASIA',25],['RBTZ',10]]},
+};
+
+const ADVICE = {
+  zh:{
+    high:['🔥 建议通过定投摊平成本，避免择时入场','⚖️ 主题ETF建议控制在总仓位30%以内','🛡️ 市场大跌时保留至少10%现金以备加仓','📊 每半年检视一次仓位比例，防止过度集中'],
+    mid:['📅 设置月度定投计划，利用时间平滑风险','🌏 宽基+主题组合平衡稳定性与增长性','💱 注意AUD/USD汇率影响，可考虑对冲版本','🔄 每年检视一次资产配置，随年龄降低风险'],
+    low:['💤 低频操作是你的优势，坚持持有是最大武器','🏦 VGS+IVV组合是经过历史验证的稳健方案','📈 即使低风险，坚持长期投资也能战胜通胀','❌ 不要因为他人赚钱而改变自己的配置策略'],
+  },
+  en:{
+    high:['🔥 Use dollar-cost averaging to reduce entry timing risk','⚖️ Keep thematic ETFs to a maximum 30% of your portfolio','🛡️ Maintain 10% cash reserve to buy during major dips','📊 Review your allocation every 6 months to avoid over-concentration'],
+    mid:['📅 Set up a monthly auto-invest plan to smooth out risk over time','🌏 Broad + thematic mix balances stability and growth potential','💱 Consider hedged ETF versions to reduce AUD/USD currency impact','🔄 Review your allocation annually and reduce risk as you age'],
+    low:['💤 Low trading frequency is your superpower — staying invested is the key weapon','🏦 VGS + IVV is a historically proven, reliable combination','📈 Even conservative investing beats inflation over the long run','❌ Don\'t change your strategy just because others are making money on hot themes'],
+  }
+};
+
+const PNAMES = {
+  zh:{conservative:'🛡 稳健型',balanced:'⚖️ 均衡型',aggressive:'🚀 进取型'},
+  en:{conservative:'🛡 Conservative',balanced:'⚖️ Balanced',aggressive:'🚀 Aggressive'},
+};
+
+// State
+let lang='zh', curQ=0;
+const answers={};
+const prefs={amt:null,horiz:null,goal:null,draw:null};
+
+function toggleLang(){
+  lang = lang==='zh'?'en':'zh';
+  document.body.className='lang-'+lang;
+  document.getElementById('langBtn').textContent=lang==='zh'?'EN':'中文';
+  document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+  // re-render current state
+  const qVisible=document.getElementById('quizPage').style.display!=='none';
+  const prefVisible=document.getElementById('prefPage').style.display!=='none';
+  if(qVisible) renderQ();
+}
+
+function startQuiz(){
+  document.getElementById('coverPage').style.display='none';
+  document.getElementById('quizPage').style.display='block';
+  curQ=0; renderQ();
+}
+
+function renderQ(){
+  const qs=Q[lang];
+  const q=qs[curQ];
+  const pct=Math.round((curQ/qs.length)*100);
+  document.getElementById('qDim').textContent=q.dim;
+  document.getElementById('qNum').textContent=String(curQ+1).padStart(2,'0');
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('qSub').textContent=q.sub;
+  const o=document.getElementById('opts');
+  o.innerHTML='';
+  const sel=answers[curQ];
+  [{L:'A',...q.a},{L:'B',...q.b}].forEach(opt=>{
+    const d=document.createElement('div');
+    d.className='option animate-in'+(sel===opt.val?' sel':'');
+    d.innerHTML=`<div class="opt-letter">${opt.L}</div><div class="opt-body"><div class="opt-main">${opt.text}</div><div class="opt-sub">${opt.sub}</div></div><div class="opt-tag">${opt.tag}</div>`;
+    d.onclick=()=>pick(opt.val);
+    o.appendChild(d);
+  });
+  document.getElementById('btnBack').disabled=curQ===0;
+  document.getElementById('btnNext').disabled=!answers[curQ];
+  document.getElementById('btnNext').innerHTML=
+    curQ===qs.length-1
+      ?`<span class="zh">填写偏好 →</span><span class="en">Preferences →</span>`
+      :`<span class="zh">继续 →</span><span class="en">Next →</span>`;
+}
+
+function pick(val){
+  answers[curQ]=val;
+  document.querySelectorAll('.option').forEach((el,i)=>{
+    el.classList.toggle('sel',i===(val===Q[lang][curQ].a.val?0:1));
+  });
+  document.getElementById('btnNext').disabled=false;
+}
+
+function nextQ(){
+  if(curQ===Q[lang].length-1){
+    document.getElementById('quizPage').style.display='none';
+    document.getElementById('prefPage').style.display='block';
+    return;
+  }
+  curQ++; renderQ();
+}
+function prevQ(){if(curQ>0){curQ--;renderQ();}}
+function showQuiz(){
+  document.getElementById('prefPage').style.display='none';
+  document.getElementById('quizPage').style.display='block';
+  curQ=Q[lang].length-1; renderQ();
+}
+
+function selChip(el,group){
+  document.querySelectorAll(`[data-g="${group}"]`).forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  prefs[group]=el.dataset.v;
+  document.getElementById('prefNext').disabled=!(prefs.amt&&prefs.horiz&&prefs.goal&&prefs.draw);
+}
+
+function computeResult(){
+  const dims=['EI','NS','TF','JP'];
+  let mbti='';
+  for(let d=0;d<4;d++){
+    const [l0,l1]=dims[d].split('');
+    let c={[l0]:0,[l1]:0};
+    [answers[d*2],answers[d*2+1]].forEach(v=>{if(v in c)c[v]++;});
+    mbti+=c[l0]>=c[l1]?l0:l1;
+  }
+  const dim5=(()=>{let c={G:0,D:0};[answers[8],answers[9]].forEach(v=>{if(v in c)c[v]++;});return c.G>=c.D?'G':'D';})();
+  const dim6=(()=>{let c={C:0,V:0};[answers[10],answers[11]].forEach(v=>{if(v in c)c[v]++;});return c.C>=c.V?'C':'V';})();
+  showResult(mbti,dim5,dim6);
+}
+
+function showResult(mbti,dim5,dim6){
+  document.getElementById('prefPage').style.display='none';
+  const rp=document.getElementById('resultPage');
+  rp.style.display='block';
+  const arch=ARCH[lang][mbti]||ARCH[lang].INFP;
+  const portData=PORT[mbti]||PORT.INTJ;
+  const riskLevel=arch.risk>=7?'high':arch.risk>=5?'mid':'low';
+  const advice=ADVICE[lang][riskLevel];
+  const pnames=PNAMES[lang];
+  let recTab='balanced';
+  if(prefs.draw==='buy'||prefs.horiz==='xl')recTab='aggressive';
+  if(prefs.draw==='sell'||prefs.horiz==='s'||arch.risk<=3)recTab='conservative';
+  const riskPct=arch.risk*10;
+  const riskColor=arch.risk>=7?'#c44b2b':arch.risk>=5?'#b8923a':'#5a7a5e';
+  const dimLabels={
+    zh:{E:'波动冷静',I:'情绪敏感',N:'长期主义',S:'短期视角',T:'数据驱动',F:'直觉跟随',J:'被动持有',P:'主动管理'},
+    en:{E:'Volatility calm',I:'Emotion-sensitive',N:'Long-term view',S:'Short-term view',T:'Data-driven',F:'Intuition-led',J:'Passive holder',P:'Active manager'},
+  };
+  const advLabel={zh:'投资建议',en:'Investor Advice'};
+  const restartLabel={zh:'重新测试',en:'Retake Test'};
+  const portLabel={zh:'推荐 ETF 组合',en:'Recommended ETF Portfolios'};
+  const riskLabel={zh:`风险 ${arch.risk}/10 · ★为推荐`,en:`Risk ${arch.risk}/10 · ★ Recommended`};
+  const recLabel={zh:'基于你的性格+偏好推荐',en:'Based on your personality + preferences'};
+  const fbLabel={zh:{title:'WealthForge · 财富模拟器',sub:'用这套组合模拟10年后的财富增长 →'},en:{title:'WealthForge · Wealth Simulator',sub:'Simulate your portfolio\'s growth over 10 years →'}};
+  const discText={
+    zh:'⚠ 本测试仅供参考，不构成投资建议。ETF历史数据来自ReviewETF（截至2026年3月）。投资有风险，入市须谨慎。如需专业建议，请咨询持牌财务顾问并阅读PDS。',
+    en:'⚠ For reference only — not financial advice. ETF data from ReviewETF (to March 2026). Investing involves risk. Please consult a licensed financial adviser (AFS Licensee) and read the PDS before investing.'
+  };
+
+  rp.innerHTML=`
+    <div class="result-banner animate-in" data-mbti="${mbti}" style="border-left:4px solid ${arch.color}">
+      <div class="result-issue">${lang==='zh'?'你的MBTI投资类型 · cynai ETF-DNA':'Your MBTI Investor Type · cynai ETF-DNA'}</div>
+      <div class="result-mbti" style="color:${arch.color}">${mbti}</div>
+      <div class="result-arch">${arch.name}</div>
+      <div class="result-desc">${arch.desc}</div>
+    </div>
+    <div class="result-dims">
+      ${mbti.split('').map(l=>`<div class="dim-block"><div class="dim-letter" style="color:${riskColor}">${l}</div><div class="dim-name">${dimLabels[lang][l]||l}</div></div>`).join('')}
+    </div>
+    <div class="traits-row">
+      <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-right:8px">${lang==='zh'?'偏好':'Prefs'}</span>
+      <span class="trait-tag">${dim5==='G'?(lang==='zh'?'全球分散':'Global spread'):(lang==='zh'?'集中配置':'Concentrated')}</span>
+      <span class="trait-tag">${dim6==='C'?(lang==='zh'?'成本优先':'Cost-first'):(lang==='zh'?'超额收益':'Alpha-seeking')}</span>
+      <span class="trait-tag">${{growth:{zh:'资本增值',en:'Growth'},income:{zh:'被动收入',en:'Income'},safety:{zh:'资产保值',en:'Safety'},retire:{zh:'退休规划',en:'Retirement'}}[prefs.goal||'growth'][lang]}</span>
+      <span class="trait-tag">${{s:{zh:'1-3年',en:'1-3yr'},m:{zh:'3-7年',en:'3-7yr'},l:{zh:'7-15年',en:'7-15yr'},xl:{zh:'15年+',en:'15yr+'}}[prefs.horiz||'m'][lang]}</span>
+    </div>
+    <div class="risk-meter">
+      <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block">${lang==='zh'?'风险画像':'Risk Profile'}</span>
+      <div class="risk-track"><div class="risk-fill" style="width:0%;background:${riskColor};transition:width 1s ease"></div></div>
+      <div class="risk-labels"><span>${lang==='zh'?'极保守':'Ultra conservative'}</span><span>${lang==='zh'?'均衡':'Balanced'}</span><span>${lang==='zh'?'极激进':'Ultra aggressive'}</span></div>
+    </div>
+    <div class="portfolio-header">
+      <div class="portfolio-title">${portLabel}</div>
+      <div style="font-size:10px;color:${riskColor}">${riskLabel}</div>
+    </div>
+    <div class="ptabs">
+      ${Object.entries(pnames).map(([k,v])=>`<button class="ptab${k===recTab?' active':''}" onclick="switchTab(this,'${k}')">${v}${k===recTab?' ★':''}</button>`).join('')}
+    </div>
+    ${Object.keys(pnames).map(key=>`<div class="portfolio-panel${key===recTab?' active':''}" id="panel-${key}">${buildPort(portData[key]||portData.balanced)}</div>`).join('')}
+    <a class="forge-banner" href="https://cynai.com.au/funapps/etfsim">
+      <div class="forge-banner-left">
+        <div class="fb-tag">cynai WealthForge</div>
+        <div class="fb-title">${fbLabel[lang].title}</div>
+        <div class="fb-sub">${fbLabel[lang].sub}</div>
+      </div>
+      <div class="forge-arrow">→</div>
+    </a>
+    <div class="advice-box" data-label="${advLabel[lang]}">
+      ${advice.map(a=>`<div class="advice-item"><span>${a.slice(0,2)}</span><span>${a.slice(2)}</span></div>`).join('')}
+    </div>
+    <div class="disclaimer-box">${discText[lang]}</div>
+    <div class="result-actions">
+      <button class="start-btn" onclick="location.reload()">${restartLabel}</button>
+      <a class="start-btn" href="https://cynai.com.au" style="text-decoration:none;background:var(--warm);color:var(--ink)">${lang==='zh'?'← 返回首页':'← Home'}</a>
+    </div>
+  `;
+  setTimeout(()=>{const f=rp.querySelector('.risk-fill');if(f)f.style.width=riskPct+'%';},200);
+}
+
+function buildPort(list){
+  if(!list||!list.length)return'';
+  return list.map(([ticker,weight])=>{
+    const e=ETFS[ticker]||{name:ticker,color:'#333',mer:'—',r1:'—',r3:'—',r5:'—',tags:{zh:[],en:[]},desc:{zh:'',en:''}};
+    const r1c=e.r1&&e.r1.startsWith('+')?'pos':e.r1&&e.r1.startsWith('-')?'neg':'';
+    return`<div class="etf-row"><div class="etf-left" style="background:${e.color}"><div class="etf-ticker">${ticker}</div><div class="etf-wt">${weight}%</div></div><div class="etf-mid"><div class="etf-name">${e.name}</div><div class="etf-desc">${e.desc[lang]}</div><div class="etf-tags">${(e.tags[lang]||[]).map(t=>`<span class="etf-tag">${t}</span>`).join('')}<span class="etf-tag">MER ${e.mer}</span></div></div><div class="etf-right"><div class="ret-item"><div class="ret-val ${r1c}">${e.r1}</div><div class="ret-lbl">1yr</div></div><div class="ret-item"><div class="ret-val gld">${e.r3}</div><div class="ret-lbl">3yr</div></div><div class="ret-item"><div class="ret-val gld">${e.r5}</div><div class="ret-lbl">5yr</div></div></div></div>`;
+  }).join('');
+}
+
+function switchTab(btn,key){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.portfolio-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+key).classList.add('active');
+}
+</script>
+</body>
+</html>
