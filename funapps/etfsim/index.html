@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF财富模拟器 · ETF-Sim | cynai Fun Apps</title>
+<meta name="description" content="严谨的ETF复利模拟器。通胀调整、CGT税务、Monte Carlo模拟。专为澳洲投资者设计。">
+<meta property="og:title" content="ETF-Sim · ETF Wealth Simulator">
+<meta property="og:description" content="Rigorous ASX ETF compound growth simulator with inflation, CGT, and Monte Carlo simulation.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --bg:#0a0e14;--surface:#0f1520;--panel:#141c2a;--border:#1e2d42;--border2:#253548;
+  --orange:#ff6b00;--blue:#2196f3;--green:#00e676;--red:#f44336;--yellow:#ffc107;
+  --cyan:#00bcd4;--text:#c8d8e8;--text2:#7a9bb5;--text3:#4a6a85;--header:#1a2535;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono','Courier New',monospace;font-size:12px;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:var(--orange);padding:0 16px;display:flex;justify-content:space-between;align-items:stretch;height:40px;}
+.topbar-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.topbar-logo{width:28px;height:28px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;letter-spacing:-0.5px;}
+.topbar-name{font-weight:700;font-size:13px;color:#000;letter-spacing:1px;}
+.topbar-app{font-size:11px;color:rgba(0,0,0,0.6);letter-spacing:2px;text-transform:uppercase;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.topbar-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,0,0,0.6);text-decoration:none;transition:color .2s;font-weight:600;}
+.topbar-link:hover{color:#000;}
+.lang-btn{font-size:11px;font-weight:700;letter-spacing:1px;padding:4px 12px;border:1.5px solid rgba(0,0,0,0.3);background:rgba(0,0,0,0.15);cursor:pointer;color:rgba(0,0,0,0.7);font-family:'IBM Plex Mono',monospace;transition:all .2s;}
+.lang-btn:hover{background:rgba(0,0,0,0.25);color:#000;}
+
+/* TICKER BAR */
+.tickerbar{background:var(--header);border-bottom:1px solid var(--border);padding:0 16px;height:28px;display:flex;align-items:center;overflow:hidden;position:relative;}
+.ticker-scroll{display:flex;gap:24px;animation:scroll 30s linear infinite;white-space:nowrap;}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick{font-size:10px;color:var(--text2);display:flex;gap:6px;}
+.tick-val{color:var(--green);}
+.tick-neg{color:var(--red);}
+
+/* LAYOUT */
+.main{display:grid;grid-template-columns:290px 1fr;height:calc(100vh - 68px);}
+.left{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;}
+.right{background:var(--bg);overflow-y:auto;display:flex;flex-direction:column;}
+
+/* LEFT PANEL */
+.lsec{border-bottom:1px solid var(--border);padding:14px 16px;}
+.lsec-title{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
+.field{margin-bottom:12px;}
+.flbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;display:block;}
+.finput{width:100%;background:var(--panel);border:1px solid var(--border2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;padding:7px 10px;outline:none;transition:border-color .15s;-moz-appearance:textfield;}
+.finput:focus{border-color:var(--orange);}
+.finput::-webkit-inner-spin-button{-webkit-appearance:none;}
+input[type="range"]{width:100%;-webkit-appearance:none;background:transparent;cursor:pointer;}
+input[type="range"]::-webkit-slider-track{height:3px;background:var(--border2);}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--orange);margin-top:-4.5px;}
+.slbl{display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:3px;}
+
+.trow{display:flex;gap:4px;flex-wrap:wrap;}
+.tbtn{padding:4px 10px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s;}
+.tbtn:hover{border-color:var(--orange);color:var(--text);}
+.tbtn.on{background:var(--orange);border-color:var(--orange);color:#000;font-weight:600;}
+
+/* ETF selector */
+.etf-list{display:flex;flex-direction:column;gap:4px;}
+.etf-item{display:grid;grid-template-columns:18px 8px auto 1fr 48px;gap:6px;align-items:center;padding:5px 8px;border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:border-color .15s;}
+.etf-item:hover{border-color:var(--border2);}
+.etf-item.sel{border-color:var(--orange);}
+.echk{width:14px;height:14px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--orange);}
+.etf-item.sel .echk{background:var(--orange);color:#000;border-color:var(--orange);}
+.edot{width:7px;height:7px;border-radius:50%;}
+.etick{font-weight:600;font-size:11px;}
+.ename{font-size:9px;color:var(--text3);}
+.eret{font-size:10px;text-align:right;color:var(--green);}
+
+/* Weights */
+.wi{margin-bottom:8px;}
+.wh{display:flex;justify-content:space-between;margin-bottom:3px;}
+.wtick{font-size:11px;font-weight:600;}
+.wval{font-size:11px;color:var(--orange);}
+.wtot{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid var(--border);margin-top:4px;font-size:10px;}
+.wtot-v{font-size:14px;font-weight:600;}
+.ok{color:var(--green)}.err{color:var(--red)}.o{color:var(--orange)}.g{color:var(--green)}.r{color:var(--red)}.b{color:var(--blue)}.y{color:var(--yellow)}
+
+.run-btn{width:100%;padding:12px;background:var(--orange);color:#000;border:none;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
+.run-btn:hover{opacity:.85;}
+.run-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* RIGHT */
+.stats-rib{background:var(--header);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);}
+.scell{padding:10px 14px;border-right:1px solid var(--border);}
+.scell:last-child{border-right:none;}
+.slabel{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
+.sval{font-size:17px;font-weight:600;line-height:1;}
+.ssub{font-size:9px;color:var(--text3);margin-top:3px;}
+
+.chart-zone{padding:16px;}
+.chart-hdr{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.legend{display:flex;gap:14px;font-size:9px;color:var(--text2);}
+.ldot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle;}
+svg.mc{width:100%;display:block;}
+
+.zone{padding:0 16px 16px;}
+.ztitle{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:10px;}
+.mc-bands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.mcb{background:var(--panel);border:1px solid var(--border);padding:10px 12px;}
+.mcbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.mcbv{font-size:16px;font-weight:600;}
+.mcbd{font-size:9px;color:var(--text3);margin-top:3px;}
+
+table.dt{width:100%;border-collapse:collapse;}
+table.dt th{background:var(--panel);border:1px solid var(--border);padding:6px 10px;text-align:right;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);font-weight:600;}
+table.dt th:first-child{text-align:left;}
+table.dt td{border:1px solid var(--border);padding:5px 10px;text-align:right;font-size:11px;}
+table.dt td:first-child{text-align:left;color:var(--text2);}
+table.dt tr:hover td{background:var(--panel);}
+table.dt tr.mile td{color:var(--yellow);}
+
+.assum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ai{background:var(--panel);border:1px solid var(--border);padding:10px 12px;}
+.al{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
+.av{font-size:12px;color:var(--text);}
+
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);padding:40px;text-align:center;}
+.empty-icon{font-size:40px;margin-bottom:14px;opacity:.4;}
+.disc{padding:10px 16px;border-top:1px solid var(--border);font-size:9px;color:var(--text3);line-height:1.6;}
+
+/* DNA link */
+.dna-banner{display:flex;justify-content:space-between;align-items:center;background:var(--ink,#1a1612);border:1px solid #2a2a2a;padding:14px 18px;margin:0 16px 16px;text-decoration:none;transition:opacity .2s;}
+.dna-banner:hover{opacity:.85;}
+.dna-tag{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--rust,#c44b2b);margin-bottom:3px;}
+.dna-title{font-size:14px;color:#e8e4dc;font-weight:600;}
+.dna-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
+.dna-arr{font-size:20px;color:#c44b2b;}
+
+.lang-en .zh{display:none!important;}
+.lang-zh .en{display:none!important;}
+
+@media(max-width:700px){
+  .main{grid-template-columns:1fr;height:auto;}
+  .left{max-height:55vh;}
+  .right{min-height:60vh;}
+  .stats-rib{grid-template-columns:repeat(3,1fr);}
+  .mc-bands{grid-template-columns:1fr 1fr;}
+  .assum-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body class="lang-zh">
+
+<!-- DISCLAIMER BANNER -->
+<div id="discBanner" style="background:#0d1b2a;border-bottom:2px solid #ff6b00;padding:8px 20px;text-align:center;font-size:11px;font-family:'IBM Plex Mono',monospace;position:sticky;top:0;z-index:9998;display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;">
+  <span style="font-size:13px;color:#ff6b00">⚠</span>
+  <span class="zh" style="color:#c8d8e8"><b style="color:#ff6b00">仅供娱乐 &amp; 教育参考</b> · 本工具不构成任何投资建议。历史数据不保证未来表现。投资前请咨询持牌财务顾问。</span>
+  <span class="en" style="color:#c8d8e8"><b style="color:#ff6b00">For fun &amp; education only</b> · NOT financial advice. Past returns ≠ future results. Consult a licensed financial adviser before investing.</span>
+  <button onclick="document.getElementById('discBanner').style.display='none'" style="background:none;border:1px solid #ff6b00;color:#ff6b00;cursor:pointer;font-size:10px;padding:2px 8px;font-family:'IBM Plex Mono',monospace;flex-shrink:0;letter-spacing:1px;">✕ <span class="zh">知道了</span><span class="en">OK</span></button>
+</div>
+
+<div class="topbar">
+  <a class="topbar-brand" href="https://cynai.com.au">
+    <div class="topbar-logo">cy</div>
+    <div>
+      <div class="topbar-name">ETF-Sim</div>
+      <div class="topbar-app zh">模拟你的 ETF 财富路径</div>
+      <div class="topbar-app en">Simulate Your ETF Wealth Path</div>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <a class="topbar-link zh" href="https://cynai.com.au/funapps/etfdna">← MoneyDNA</a>
+    <a class="topbar-link en" href="https://cynai.com.au/funapps/etfdna">← MoneyDNA</a>
+    <a class="topbar-link zh" href="https://cynai.com.au">首页</a>
+    <a class="topbar-link en" href="https://cynai.com.au">Home</a>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
+  </div>
+</div>
+
+<div class="tickerbar">
+  <div class="ticker-scroll" id="tickerScroll"></div>
+</div>
+
+<div class="main">
+<!-- LEFT -->
+<div class="left">
+  <div class="lsec">
+    <div class="lsec-title zh">资金设置</div>
+    <div class="lsec-title en">Capital Settings</div>
+    <div class="field">
+      <label class="flbl zh">初始投入 (AUD)</label>
+      <label class="flbl en">Initial Investment (AUD)</label>
+      <input class="finput" type="number" id="initial" value="20000" min="0" step="1000">
+    </div>
+    <div class="field">
+      <label class="flbl zh">每月追加 (AUD)</label>
+      <label class="flbl en">Monthly Contribution (AUD)</label>
+      <input class="finput" type="number" id="monthly" value="1000" min="0" step="100">
+    </div>
+    <div class="field">
+      <label class="flbl"><span class="zh">投资年限</span><span class="en">Investment Period</span>: <span id="yrlbl" class="o">10</span> <span class="zh">年</span><span class="en">yrs</span></label>
+      <input type="range" id="years" min="1" max="40" value="10" oninput="document.getElementById('yrlbl').textContent=this.value">
+      <div class="slbl"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span></div>
+    </div>
+  </div>
+
+  <div class="lsec">
+    <div class="lsec-title zh">模拟设置</div>
+    <div class="lsec-title en">Simulation Settings</div>
+    <div class="field">
+      <label class="flbl zh">通胀调整 (2.5% p.a.)</label>
+      <label class="flbl en">Inflation Adjustment (2.5% p.a.)</label>
+      <div class="trow">
+        <button class="tbtn" id="infNo" onclick="tog('inf','no')"><span class="zh">关闭</span><span class="en">Off</span></button>
+        <button class="tbtn on" id="infYes" onclick="tog('inf','yes')"><span class="zh">开启</span><span class="en">On</span></button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="flbl zh">CGT 税务模式</label>
+      <label class="flbl en">CGT Tax Mode</label>
+      <div class="trow">
+        <button class="tbtn on" id="taxNo" onclick="tog('tax','no')"><span class="zh">忽略</span><span class="en">None</span></button>
+        <button class="tbtn" id="taxYes" onclick="tog('tax','yes')">15%</button>
+        <button class="tbtn" id="taxFull" onclick="tog('tax','full')">47%</button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="flbl">Monte Carlo (1,000×)</label>
+      <div class="trow">
+        <button class="tbtn on" id="mcOff" onclick="tog('mc','off')"><span class="zh">关闭</span><span class="en">Off</span></button>
+        <button class="tbtn" id="mcOn" onclick="tog('mc','on')"><span class="zh">开启</span><span class="en">On</span></button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="flbl zh">费用计算</label>
+      <label class="flbl en">Fee Calculation</label>
+      <div class="trow">
+        <button class="tbtn on" id="costAuto" onclick="tog('cost','auto')"><span class="zh">按MER扣除</span><span class="en">Include MER</span></button>
+        <button class="tbtn" id="costZero" onclick="tog('cost','zero')"><span class="zh">忽略费用</span><span class="en">No fees</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lsec">
+    <div class="lsec-title" style="display:flex;justify-content:space-between">
+      <span><span class="zh">选择ETF（最多4只）</span><span class="en">Select ETFs (max 4)</span></span>
+      <span id="selCount" style="color:var(--text2)">0/4</span>
+    </div>
+    <div class="etf-list" id="etfList"></div>
+  </div>
+
+  <div class="lsec" id="weightSec" style="display:none">
+    <div class="lsec-title zh">配置比例（合计须100%）</div>
+    <div class="lsec-title en">Allocation (must total 100%)</div>
+    <div id="weightSliders"></div>
+    <div class="wtot"><span><span class="zh">合计</span><span class="en">Total</span></span><span class="wtot-v" id="totPct">0%</span></div>
+  </div>
+
+  <button class="run-btn" id="runBtn" onclick="runSim()" disabled>
+    ▶ <span class="zh">运行模拟</span><span class="en">RUN SIMULATION</span>
+  </button>
+</div>
+
+<!-- RIGHT -->
+<div class="right" id="rightPanel">
+  <div class="empty">
+    <div class="empty-icon">◈</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><span class="zh">等待输入</span><span class="en">Awaiting Input</span></div>
+    <div style="font-size:11px;line-height:1.8"><span class="zh">选择ETF → 设置比例（合计100%）→ 点击运行<br>将计算复利增长、通胀调整、CGT税务<br>以及Monte Carlo信心区间</span><span class="en">Select ETFs → Set weights (total 100%) → Run<br>Calculates compound growth, inflation adjustment,<br>CGT tax, and Monte Carlo confidence bands</span></div>
+  </div>
+</div>
+</div>
+
+<script>
+const ETF_DB={
+  IVV:{name:'iShares S&P 500',          color:'#2196f3',mer:0.04, mu5:0.139,sigma:0.16,mu1:0.069},
+  VGS:{name:'Vanguard MSCI World ex-AU', color:'#00bcd4',mer:0.18, mu5:0.118,sigma:0.15,mu1:0.078},
+  NDQ:{name:'BetaShares Nasdaq 100',     color:'#9c27b0',mer:0.48, mu5:0.140,sigma:0.22,mu1:0.113},
+  FANG:{name:'Global X FANG+',           color:'#f44336',mer:0.35, mu5:0.161,sigma:0.28,mu1:0.082},
+  ASIA:{name:'BetaShares Asia Tech Tigers',color:'#ff9800',mer:0.67,mu5:0.047,sigma:0.30,mu1:0.329},
+  HACK:{name:'BetaShares Cybersecurity', color:'#607d8b',mer:0.67, mu5:0.099,sigma:0.18,mu1:-0.099},
+  RBTZ:{name:'BetaShares Robotics & AI', color:'#795548',mer:0.57, mu5:0.020,sigma:0.20,mu1:0.041},
+  DFND:{name:'VanEck Global Defence',    color:'#4caf50',mer:0.65, mu5:null, sigma:0.18,mu1:0.546},
+  SEMI:{name:'Global X Semiconductors',  color:'#e91e63',mer:0.45, mu5:null, sigma:0.35,mu1:0.672},
+  VEU:{name:'Vanguard All-World ex-US',  color:'#00897b',mer:0.07, mu5:0.083,sigma:0.14,mu1:0.133},
+  IHVV:{name:'iShares S&P 500 Hedged',   color:'#1565c0',mer:0.10, mu5:0.080,sigma:0.16,mu1:0.153},
+  BGBL:{name:'BetaShares Global Shares', color:'#37474f',mer:0.08, mu5:null, sigma:0.15,mu1:0.084},
+};
+
+const TICKS=[
+  {t:'VGS',p:'$149.65',c:'+1.2%',pos:true},{t:'IVV',p:'$63.02',c:'+0.6%',pos:true},
+  {t:'NDQ',p:'$51.26',c:'+0.6%',pos:true},{t:'ASIA',p:'$17.80',c:'+2.5%',pos:true},
+  {t:'FANG',p:'$30.44',c:'+0.7%',pos:true},{t:'HACK',p:'$12.04',c:'-0.3%',pos:false},
+  {t:'DFND',p:'$38.00',c:'+3.3%',pos:true},{t:'SEMI',p:'$14.80',c:'-1.2%',pos:false},
+  {t:'AUD/USD',p:'0.6482',c:'',pos:true},{t:'ASX200',p:'8,214',c:'+0.4%',pos:true},{t:'RBA',p:'4.10%',c:'',pos:true},
+];
+
+const settings={inf:'yes',tax:'no',mc:'off',cost:'auto'};
+const selected=[];
+const weights={};
+let lang='zh';
+
+// Ticker bar
+function buildTicker(){
+  const sc=document.getElementById('tickerScroll');
+  const items=[...TICKS,...TICKS];
+  sc.innerHTML=items.map(t=>`<div class="tick">${t.t} <span class="tick-val">${t.p}</span>${t.c?`<span class="${t.pos?'tick-val':'tick-neg'}">${t.c}</span>`:''}</div>`).join('');
+}
+
+// ETF list
+function buildETFList(){
+  const list=document.getElementById('etfList');
+  list.innerHTML='';
+  Object.entries(ETF_DB).forEach(([ticker,e])=>{
+    const retStr=e.mu5?'+'+((e.mu5*100).toFixed(1))+'% 5yr':'+'+((e.mu1*100).toFixed(1))+'% 1yr';
+    const d=document.createElement('div');
+    d.className='etf-item';d.id='ei-'+ticker;
+    d.innerHTML=`<div class="echk" id="chk-${ticker}">✓</div><div class="edot" style="background:${e.color}"></div><div><div class="etick">${ticker}</div><div class="ename">${e.name}</div></div><div></div><div class="eret">${retStr}</div>`;
+    d.onclick=()=>toggleETF(ticker,d);
+    list.appendChild(d);
+  });
+}
+
+function toggleETF(ticker,el){
+  const idx=selected.indexOf(ticker);
+  if(idx>=0){selected.splice(idx,1);delete weights[ticker];el.classList.remove('sel');}
+  else{if(selected.length>=4)return;selected.push(ticker);el.classList.add('sel');}
+  document.getElementById('selCount').textContent=selected.length+'/4';
+  buildWeights();checkReady();
+}
+
+function buildWeights(){
+  const ws=document.getElementById('weightSec');
+  if(!selected.length){ws.style.display='none';return;}
+  ws.style.display='block';
+  const eq=Math.floor(100/selected.length),rem=100-eq*selected.length;
+  selected.forEach((t,i)=>{if(weights[t]===undefined)weights[t]=eq+(i===0?rem:0);});
+  const wrap=document.getElementById('weightSliders');
+  wrap.innerHTML='';
+  selected.forEach(ticker=>{
+    const e=ETF_DB[ticker],w=weights[ticker]||0;
+    const div=document.createElement('div');
+    div.className='wi';
+    div.innerHTML=`<div class="wh"><span class="wtick" style="color:${e.color}">${ticker}</span><span class="wval" id="wv-${ticker}">${w}%</span></div><input type="range" min="0" max="100" value="${w}" id="ws-${ticker}" oninput="onW('${ticker}',this.value)"><div style="font-size:9px;color:var(--text3)">${e.name}</div>`;
+    wrap.appendChild(div);
+  });
+  updateTot();
+}
+
+function onW(ticker,val){weights[ticker]=parseInt(val);document.getElementById('wv-'+ticker).textContent=val+'%';updateTot();checkReady();}
+function updateTot(){const t=selected.reduce((s,x)=>s+(weights[x]||0),0);const el=document.getElementById('totPct');el.textContent=t+'%';el.className='wtot-v '+(t===100?'ok':'err');}
+function checkReady(){const t=selected.reduce((s,x)=>s+(weights[x]||0),0);document.getElementById('runBtn').disabled=!selected.length||t!==100;}
+
+function tog(group,val){
+  settings[group]=val;
+  const map={inf:['infNo','infYes'],tax:['taxNo','taxYes','taxFull'],mc:['mcOff','mcOn'],cost:['costAuto','costZero']};
+  map[group].forEach(id=>{const b=document.getElementById(id);if(b)b.classList.remove('on');});
+  const lu={inf:{no:'infNo',yes:'infYes'},tax:{no:'taxNo',yes:'taxYes',full:'taxFull'},mc:{off:'mcOff',on:'mcOn'},cost:{auto:'costAuto',zero:'costZero'}};
+  const aid=lu[group][val];if(aid)document.getElementById(aid).classList.add('on');
+}
+
+function toggleLang(){lang=lang==='zh'?'en':'zh';document.body.className='lang-'+lang;document.getElementById('langBtn').textContent=lang==='zh'?'EN':'中文';document.documentElement.lang=lang==='zh'?'zh-CN':'en';}
+
+// ── SIM ──
+function runSim(){
+  const initial=parseFloat(document.getElementById('initial').value)||0;
+  const monthly=parseFloat(document.getElementById('monthly').value)||0;
+  const years=parseInt(document.getElementById('years').value);
+  let blendMu=0,blendSigma=0,blendMer=0;
+  selected.forEach(t=>{const w=(weights[t]||0)/100,e=ETF_DB[t];blendMu+=w*(e.mu5||e.mu1);blendSigma+=w*e.sigma;blendMer+=w*e.mer/100;});
+  const infRate=settings.inf==='yes'?0.025:0;
+  const effMu=settings.cost==='zero'?blendMu:blendMu-blendMer;
+  const realMu=effMu-infRate;
+  const nom=[initial],real=[initial],inv=[initial];
+  let nb=initial,rb=initial,ib=initial;
+  for(let y=1;y<=years;y++){for(let m=0;m<12;m++){nb=nb*(1+effMu/12)+monthly;rb=rb*(1+realMu/12)+monthly;ib+=monthly;}nom.push(nb);real.push(rb);inv.push(ib);}
+  let taxRate=0;
+  if(settings.tax==='yes')taxRate=0.15;
+  if(settings.tax==='full')taxRate=0.47;
+  const gain=nb-ib,tax=Math.max(0,gain*taxRate),afterTax=nb-tax;
+  let mcP10=null,mcP50=null,mcP90=null,mcPaths=[];
+  if(settings.mc==='on'){
+    const N=1000,ends=[];
+    for(let s=0;s<N;s++){let b=initial;for(let y=0;y<years;y++){const r=gauss(effMu,blendSigma);for(let m=0;m<12;m++)b=b*(1+r/12)+monthly;}ends.push(b);}
+    ends.sort((a,b)=>a-b);mcP10=ends[Math.floor(N*.1)];mcP50=ends[Math.floor(N*.5)];mcP90=ends[Math.floor(N*.9)];
+    for(let s=0;s<20;s++){const p=[initial];let b=initial;for(let y=0;y<years;y++){const r=gauss(effMu,blendSigma);for(let m=0;m<12;m++)b=b*(1+r/12)+monthly;p.push(b);}mcPaths.push(p);}
+  }
+  render({years,initial,monthly,invested:ib,effMu,realMu,blendSigma,blendMer,nom,real,inv,afterTax,tax,gain,mcP10,mcP50,mcP90,mcPaths,infRate,taxRate});
+}
+
+function gauss(mu,sigma){const u1=Math.random(),u2=Math.random();return mu+sigma*Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);}
+
+function render(d){
+  const rp=document.getElementById('rightPanel');
+  const cagr=(Math.pow(d.nom[d.years]/d.initial,1/d.years)-1);
+  const rcagr=(Math.pow(d.real[d.years]/d.initial,1/d.years)-1);
+  const gpct=((d.nom[d.years]-d.invested)/d.invested*100);
+
+  const T=(zh,en)=>lang==='zh'?zh:en;
+
+  rp.innerHTML=`
+    <div class="stats-rib">
+      <div class="scell"><div class="slabel">${T('最终资产（名义）','Final Value (Nominal)')}</div><div class="sval g">${fa(d.nom[d.years])}</div><div class="ssub">${d.years}${T('年后','yr result')}</div></div>
+      <div class="scell"><div class="slabel">${T('税后资产','After-tax Value')}</div><div class="sval o">${fa(d.afterTax)}</div><div class="ssub">CGT ${(d.taxRate*100).toFixed(0)}%</div></div>
+      <div class="scell"><div class="slabel">${T('实际购买力','Real Purchasing Power')}</div><div class="sval b">${fa(d.real[d.years])}</div><div class="ssub">${T('通胀','Inflation')} ${(d.infRate*100).toFixed(1)}%</div></div>
+      <div class="scell"><div class="slabel">${T('总收益','Total Gain')}</div><div class="sval y">+${fa(d.gain)}</div><div class="ssub">+${gpct.toFixed(1)}%</div></div>
+      <div class="scell"><div class="slabel">${T('名义/实际年化','Nominal/Real CAGR')}</div><div class="sval">${(cagr*100).toFixed(2)}<span style="font-size:11px">%</span></div><div class="ssub">${T('实际','Real')} ${(rcagr*100).toFixed(2)}%</div></div>
+    </div>
+
+    <div class="chart-zone">
+      <div class="chart-hdr">
+        <span>◼ ${T('资产增长曲线','Growth Curve')} · ${d.years}${T('年','yr')}</span>
+        <div class="legend">
+          <span><span class="ldot" style="background:var(--orange)"></span>${T('名义资产','Nominal')}</span>
+          <span><span class="ldot" style="background:var(--blue)"></span>${T('实际购买力','Real')}</span>
+          <span><span class="ldot" style="background:var(--text3)"></span>${T('累计投入','Invested')}</span>
+          ${d.mcPaths.length?`<span><span class="ldot" style="background:rgba(255,107,0,0.25)"></span>MC</span>`:''}
+        </div>
+      </div>
+      <svg class="mc" id="mainChart" viewBox="0 0 800 260"></svg>
+    </div>
+
+    ${d.mcP50!==null?`
+    <div class="zone">
+      <div class="ztitle">◼ MONTE CARLO · 1,000 ${T('次模拟','simulations')} · ${d.years}${T('年','yr')}</div>
+      <div class="mc-bands">
+        <div class="mcb"><div class="mcbl">${T('悲观 (P10)','Pessimistic P10')}</div><div class="mcbv r">${fa(d.mcP10)}</div><div class="mcbd">${T('10%概率低于此值','10% chance of falling below')}</div></div>
+        <div class="mcb"><div class="mcbl">${T('中位数 (P50)','Median P50')}</div><div class="mcbv o">${fa(d.mcP50)}</div><div class="mcbd">${T('统计学中间值','Statistical median outcome')}</div></div>
+        <div class="mcb"><div class="mcbl">${T('乐观 (P90)','Optimistic P90')}</div><div class="mcbv g">${fa(d.mcP90)}</div><div class="mcbd">${T('90%概率低于此值','90% chance of falling below')}</div></div>
+      </div>
+    </div>`:''}
+
+    <div class="zone">
+      <div class="ztitle">◼ ${T('逐年数据表','Annual Data Table')}</div>
+      <table class="dt"><thead><tr>
+        <th>${T('年份','Year')}</th><th>${T('名义资产','Nominal')}</th>
+        <th>${T('实际购买力','Real Value')}</th><th>${T('累计投入','Invested')}</th>
+        <th>${T('累计收益','Gain')}</th><th>${T('年化回报','CAGR')}</th>
+      </tr></thead><tbody id="ytable"></tbody></table>
+    </div>
+
+    <a class="dna-banner" href="https://cynai.com.au/funapps/etfdna">
+      <div><div class="dna-tag">cynai MoneyDNA</div>
+        <div class="dna-title">${T('还不知道该买哪只ETF？→ 先测测你的投资基因','Not sure which ETFs to pick? → Take the MoneyDNA test')}</div>
+        <div class="dna-sub">${T('12题MBTI测试 · 获取专属ETF组合推荐','12-question MBTI test · Get your personalised ETF portfolio')}</div>
+      </div>
+      <div class="dna-arr">→</div>
+    </a>
+
+    <div class="zone">
+      <div class="ztitle">◼ ${T('计算假设说明','Calculation Assumptions')}</div>
+      <div class="assum-grid">
+        <div class="ai"><div class="al">${T('组合年化回报（名义）','Portfolio Return (Nominal)')}</div><div class="av">${(d.effMu*100).toFixed(2)}% p.a.</div></div>
+        <div class="ai"><div class="al">${T('组合年化回报（实际）','Portfolio Return (Real)')}</div><div class="av">${(d.realMu*100).toFixed(2)}% p.a.</div></div>
+        <div class="ai"><div class="al">${T('加权平均MER','Weighted Avg MER')}</div><div class="av">${(d.blendMer*100).toFixed(2)}% p.a.</div></div>
+        <div class="ai"><div class="al">${T('通胀假设','Inflation Assumption')}</div><div class="av">${(d.infRate*100).toFixed(1)}% p.a.</div></div>
+        <div class="ai"><div class="al">${T('历史波动率（年化）','Historical Volatility (Ann.)')}</div><div class="av">±${(d.blendSigma*100).toFixed(1)}%</div></div>
+        <div class="ai"><div class="al">${T('税务处理','Tax Treatment')}</div><div class="av">${settings.tax==='no'?T('忽略','None'):settings.tax==='yes'?'CGT 15%':T('边际税率 47%','Marginal 47%')}</div></div>
+        <div class="ai"><div class="al">${T('分红再投资','Dividends')}</div><div class="av">${T('假设100%再投入','Assumed 100% reinvested')}</div></div>
+        <div class="ai"><div class="al">${T('复利频率','Compounding')}</div><div class="av">${T('每月','Monthly')}</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      ⚠ ${T(
+        '本工具仅供教育参考，不构成投资建议。历史回报数据来自ReviewETF（截至2026年3月），过去表现不保证未来结果。Monte Carlo使用简化正态分布，实际市场存在厚尾效应。税务计算仅为估算。请在投资前咨询持牌财务顾问并阅读ETF产品披露声明（PDS）。cynai © 2026',
+        'For educational purposes only — not financial advice. ETF data from ReviewETF (to March 2026). Past performance does not guarantee future results. Monte Carlo uses simplified normal distribution; real markets exhibit fat tails. Tax figures are estimates only. Please consult a licensed financial adviser (AFS Licensee) and read the ETF Product Disclosure Statement (PDS) before investing. cynai © 2026'
+      )}
+    </div>
+  `;
+  drawChart(d);buildTable(d);
+}
+
+function drawChart(d){
+  const svg=document.getElementById('mainChart');
+  if(!svg)return;
+  const W=800,H=260,PL=58,PR=18,PT=10,PB=30,plotW=W-PL-PR,plotH=H-PT-PB;
+  const all=[...d.nom,...d.real,...d.inv,...d.mcPaths.flat()];
+  const maxV=Math.max(...all)*1.07,minV=0;
+  const xS=i=>PL+(i/d.years)*plotW;
+  const yS=v=>PT+plotH-((v-minV)/(maxV-minV))*plotH;
+  const path=(pts,close=false)=>{
+    let p=`M ${xS(0)} ${yS(pts[0])}`;
+    for(let i=1;i<pts.length;i++){const x=xS(i),y=yS(pts[i]),px=xS(i-1),py=yS(pts[i-1]),cx=(px+x)/2;p+=` C ${cx} ${py} ${cx} ${y} ${x} ${y}`;}
+    if(close)p+=` L ${xS(pts.length-1)} ${H-PB} L ${PL} ${H-PB} Z`;
+    return p;
+  };
+  let ticks='';
+  for(let i=0;i<=4;i++){const v=minV+(maxV-minV)*i/4,y=yS(v);ticks+=`<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="#1e2d42" stroke-width="0.5"/><text x="${PL-3}" y="${y+4}" fill="#4a6a85" font-size="9" text-anchor="end" font-family="IBM Plex Mono,monospace">${fs(v)}</text>`;}
+  const step=Math.ceil(d.years/8);
+  let xax='';for(let y=0;y<=d.years;y+=step)xax+=`<text x="${xS(y)}" y="${H-PB+14}" fill="#4a6a85" font-size="9" text-anchor="middle" font-family="IBM Plex Mono,monospace">${y}yr</text>`;
+  const mc=d.mcPaths.map(p=>`<path d="${path(p)}" fill="none" stroke="rgba(255,107,0,0.07)" stroke-width="1"/>`).join('');
+  // composition bar
+  let bar='',bx=W-PR-130;
+  selected.forEach(t=>{const w=weights[t]||0,e=ETF_DB[t],bw=w*1.3;bar+=`<rect x="${bx}" y="${PT}" width="${bw}" height="6" fill="${e.color}"/>`;bx+=bw;});
+  bx=W-PR-130;
+  selected.forEach(t=>{const e=ETF_DB[t];bar+=`<circle cx="${bx+4}" cy="${PT+16}" r="3" fill="${e.color}"/><text x="${bx+10}" y="${PT+20}" fill="${e.color}" font-size="8" font-family="IBM Plex Mono,monospace">${t} ${weights[t]}%</text>`;bx+=(weights[t]||0)*1.3;});
+
+  svg.innerHTML=`<defs><linearGradient id="gN" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff6b00" stop-opacity="0.3"/><stop offset="100%" stop-color="#ff6b00" stop-opacity="0"/></linearGradient><linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2196f3" stop-opacity="0.2"/><stop offset="100%" stop-color="#2196f3" stop-opacity="0"/></linearGradient></defs>
+    ${ticks}${xax}${mc}
+    <path d="${path(d.inv)}" fill="none" stroke="#253548" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <path d="${path(d.real,true)}" fill="url(#gR)"/>
+    <path d="${path(d.real)}" fill="none" stroke="#2196f3" stroke-width="2"/>
+    <path d="${path(d.nom,true)}" fill="url(#gN)"/>
+    <path d="${path(d.nom)}" fill="none" stroke="#ff6b00" stroke-width="2.5"/>
+    <circle cx="${xS(d.years)}" cy="${yS(d.nom[d.years])}" r="5" fill="#ff6b00" stroke="#0a0e14" stroke-width="2"/>
+    <circle cx="${xS(d.years)}" cy="${yS(d.real[d.years])}" r="4" fill="#2196f3" stroke="#0a0e14" stroke-width="2"/>
+    ${bar}`;
+}
+
+function buildTable(d){
+  const tb=document.getElementById('ytable');if(!tb)return;
+  const step=d.years<=10?1:d.years<=20?2:5;
+  const rows=[];
+  for(let y=1;y<=d.years;y++){
+    if(y%step!==0&&y!==1&&y!==d.years)continue;
+    const n=d.nom[y],r=d.real[y],iv=d.inv[y],g=n-iv,cagr=(Math.pow(n/d.initial,1/y)-1)*100;
+    const m2x=n>=d.initial*2&&d.nom[y-1]<d.initial*2,m5x=n>=d.initial*5&&(y<=1||d.nom[y-1]<d.initial*5);
+    rows.push(`<tr${m2x||m5x?' class="mile"':''}><td>${y}yr${m2x?' ★2x':''}${m5x?' ★5x':''}</td><td class="g">${fa(n)}</td><td class="b">${fa(r)}</td><td style="color:var(--text2)">${fa(iv)}</td><td class="${g>=0?'g':'r'}">${g>=0?'+':''}${fa(g)}</td><td class="o">${cagr.toFixed(2)}%</td></tr>`);
+  }
+  tb.innerHTML=rows.join('');
+}
+
+function fa(n){if(Math.abs(n)>=1e6)return'$'+(n/1e6).toFixed(2)+'M';if(Math.abs(n)>=1e3)return'$'+(n/1e3).toFixed(1)+'K';return'$'+n.toFixed(0);}
+function fs(n){if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'K';return'$'+n.toFixed(0);}
+
+buildTicker();buildETFList();
+</script>
+</body>
+</html>
